@@ -21,7 +21,8 @@
     "parity": "node scripts/parity.mjs",
     "dev:product": "vite --host 127.0.0.1 --port 5198 --open /?product=1",
     "predev:product": "node scripts/gen-index.mjs",
-    "render:product": "node scripts/gen-index.mjs && remotion render src/remotion/index.ts Main exports/product-demo.mp4 --props=examples/product-scene.json --codec=h264"
+    "render:product": "node scripts/gen-index.mjs && remotion render src/remotion/index.ts Main exports/product-demo.mp4 --props=examples/product-scene.json --codec=h264",
+    "test:product-render": "node scripts/test-product-render.mjs"
   },
   "dependencies": {
     "@react-three/fiber": "9.6.1",

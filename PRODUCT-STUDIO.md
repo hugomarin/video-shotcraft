@@ -104,3 +104,10 @@ node workbench/scripts/product.mjs render /tmp/web-bundle/project.json --assets 
 `pack` crea un directorio nuevo con project.json, public/ y manifest.json (tamaño y SHA-256 de cada material). Incluye todos los fotogramas y el audio referenciado; no incluye el motor. En otro clon compatible puedes renderizar con `--assets` sin copiar materiales al repo. Para editar allí, copia el contenido de public/ del paquete a workbench/public/ antes de importar project.json. El inspector no importa carpetas de paquetes todavía. Tanto el JSON directo como la envoltura `{project: ...}` pueden abrirse en el editor; las escenas de producto se validan antes de reemplazar el proyecto actual.
 
 Esto proporciona herramientas semánticas para que un agente construya una propuesta. No incluye un modelo que analice automáticamente cualquier video de referencia ni garantiza reproducir la estética de Linear.
+
+## Comprobar recorte de video al final de un montaje
+```sh
+cd workbench
+npm run test:product-render -- --browser /ruta/al/navegador
+```
+Esta prueba de integración requiere FFmpeg y un navegador compatible (si se omite `--browser`, Remotion puede descargarlo). Genera material sintético y comprueba el MP4, incluyendo un recorte de origen que excede la duración completa del montaje. El tiempo de la escena de producto se calcula directamente desde el frame del clip; evita el límite que Freeze aplica al tiempo de la composición. No modifica el remapeo de las demás cards.

@@ -57,7 +57,10 @@ export const MainComposition: React.FC<{ project: ProjectData; posePreview?:Pose
                     transform: `translate(${clip.x}px, ${clip.y}px) scale(${clip.scale})`,
                   }}
                 >
-                  {card.kind === "video" ? (
+                  {clip.cardId === "product-optical-scene" ? (
+                    // Freeze clamps to the composition duration; trimmed source time can exceed it.
+                    <Comp {...props} __sourceOffset={clip.inOffset} __sourceSpeed={clip.speed} />
+                  ) : card.kind === "video" ? (
                     // 视频卡：同音频卡走原生播放通道，保留图层包裹
                     <Comp {...props} inOffset={clip.inOffset} speed={clip.speed} />
                   ) : (
