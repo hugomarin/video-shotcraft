@@ -51,3 +51,14 @@ Prueba portable: `examples/product-motion.json` (2 s, 960×600, 30 fps). Render 
 npx remotion render src/remotion/index.ts Main exports/product-motion.mp4 --props=examples/product-motion.json --codec=h264
 npm run test:product
 ```
+
+## Comparar ópticas
+La sección **Óptica** permite seleccionar perspectiva o proyección paralela, distancia de 8 a 48 unidades y 48/96/144 muestras de lente. Al cambiar distancia se compensa la óptica para conservar el tamaño en el plano central; las zonas inclinadas cambian su convergencia. El encuadre sigue en la pose. La apertura se compensa con la distancia para mantener aproximadamente la intensidad de desenfoque. Son controles artísticos, no focales ni aperturas físicas calibradas. La proyección paralela utiliza un desenfoque sintético; la distancia conserva influencia en esa aproximación, aunque no cambia la geometría proyectada.
+
+Predeterminados anteriores conservados: perspectiva, distancia 14.4, 48 muestras. Para probar perspectiva más contenida, compara 14.4 y 36 con el mismo encuadre. Más muestras pueden reducir la estructura visible del muestreo a costa de más trabajo gráfico; no cambian la profundidad ni garantizan mayor realismo. No se ha incorporado un postprocesado de profundidad de escena ni geometría multicapa.
+
+`examples/product-optics.json` contiene seis clips de dos segundos: perspectiva 14.4, perspectiva 36 y paralela, primero con imagen clara y después oscura. Todos usan el mismo recorrido y 96 muestras, para comparar ópticas sin mezclar ese cambio con calidad de muestreo. Desde workbench:
+```sh
+npx remotion render src/remotion/index.ts Main exports/product-optics.mp4 --props=examples/product-optics.json --codec=h264
+```
+Para abrirlo en el editor, importa el objeto `project` del ejemplo (el archivo completo es la envoltura de props del CLI). Los medios sintéticos están incluidos; el video resultante queda fuera de Git.

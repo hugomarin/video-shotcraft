@@ -1,0 +1,1 @@
+export function resolveOptics(settings:{cameraDistance?:number;focusQuality?:number;projection?:string},pose:{zoom:number;aperture:number}):{distance:number;lens:number;aperture:number;samples:number;orthographic:number};
