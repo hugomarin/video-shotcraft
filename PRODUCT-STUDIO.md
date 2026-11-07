@@ -30,7 +30,7 @@ La configuración está en `examples/product-scene.json`; cambiar `project.track
 - Integración con timeline, propiedades e historial existentes de Shotcraft.
 
 ## Pendiente
-Video como textura, captura web, carga de medios desde el inspector, capas semánticas, presets reversibles, nuevo inspector y adaptación HyperFrames. El prototipo anterior permanece separado como referencia de migración.
+Video como textura, captura web, carga de medios desde el inspector, capas semánticas, presets reversibles, foco con clic y adaptación HyperFrames. El prototipo anterior permanece separado como referencia de migración.
 
 ## Validación
 Build TypeScript/Vite y cinco tests de plataforma pasan. Se renderizó el MP4 completo y se inspeccionaron inicio/mitad/final. La óptica sigue siendo experimental; este ejemplo demuestra el pipeline, no una equivalencia visual exacta con Linear. El build conserva una advertencia de tamaño del bundle.
@@ -38,3 +38,16 @@ Build TypeScript/Vite y cinco tests de plataforma pasan. Se renderizó el MP4 co
 [AGENTS.md](AGENTS.md) contiene las reglas para los agentes; [el handoff](docs/PRODUCT-HANDOFF.md) describe visión, decisiones y próximas entregas. El fork es `hugomarin/video-shotcraft`; el original permanece como `upstream`.
 
 Verificación adicional: una copia limpia de los archivos preparados instaló con `npm ci`, compiló y renderizó el frame 90 sin medios privados. El preview local cargó la card pública sin errores de JavaScript.
+
+## Dirigir inicio y final
+Selecciona una escena de producto y usa **Ver inicio** o **Ver final**. Los controles de **Dirigir toma** muestran el estado de ese instante. Al ajustarlos creas una vista de prueba: aún no modifica el proyecto ni lo exportado. Usa **Fijar inicio** o **Fijar final** para guardarla, o **Descartar prueba** para volver. Pausa la reproducción para editar. Cambiar de instante o clip descarta la prueba sin guardar.
+
+Los extremos incluyen giro, inclinación, encuadre, posición, punto de foco y apertura. Guardar cada extremo es una operación de historial; JSON y recarga conservan lo guardado. El modelo `props.motion` tiene `version: 1`, `startFrame`, `endFrame`, `start` y `end`; los tiempos son fotogramas de origen, antes de recorte/velocidad. Si editas un clip recortado, fijar un extremo conserva la pose visible del otro extremo. Cambiar después su duración recorta o prolonga el movimiento, no redistribuye automáticamente sus keyframes.
+
+Los proyectos sin `motion` conservan sus parámetros e interpolación anteriores. Con `motion`, sus poses tienen prioridad sobre los campos antiguos. Cada pose usa `yaw`/`pitch` (grados), `zoom` (encuadre), `panX`/`panY` (unidades de escena), `u`/`v` (coordenadas 0–1 sobre la imagen, origen arriba izquierda) y `aperture` (intensidad artística, no f-stop físico). El controlador compartido valida versión, intervalos y límites antes de guardar; no se trata todavía de una validación completa del proyecto importado.
+
+Prueba portable: `examples/product-motion.json` (2 s, 960×600, 30 fps). Render desde workbench:
+```sh
+npx remotion render src/remotion/index.ts Main exports/product-motion.mp4 --props=examples/product-motion.json --codec=h264
+npm run test:product
+```

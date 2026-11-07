@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "test:product": "node --test scripts/test-product-motion.mjs",
     "test:platform": "node --test scripts/test-platform.mjs",
     "test:themes": "node scripts/test-themes.mjs",
     "test:legacy": "node scripts/gen-index.mjs && node scripts/test-legacy.mjs",

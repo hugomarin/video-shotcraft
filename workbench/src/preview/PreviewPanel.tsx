@@ -1,3 +1,4 @@
+import {useProductPreview} from "../productPreview";
 import React, { useEffect, useMemo, useState } from "react";
 import { Player } from "@remotion/player";
 import { MainComposition } from "./Composition";
@@ -135,7 +136,8 @@ export const PreviewPanel: React.FC = () => {
   const [loop, setLoop] = useState(true);
 
   const duration = projectDuration(project);
-  const inputProps = useMemo(() => ({ project }), [project]);
+  const posePreview = useProductPreview(s=>s.preview);
+  const inputProps = useMemo(() => ({ project, posePreview }), [project, posePreview]);
 
   return (
     <div className="preview-panel">

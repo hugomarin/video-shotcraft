@@ -1,5 +1,7 @@
 import React,{useEffect,useLayoutEffect,useRef} from 'react';
 import {AbsoluteFill,useCurrentFrame,useVideoConfig,staticFile,delayRender,continueRender,cancelRender} from 'remotion';
+import {resolveMotion,sampleMotion} from './motion.mjs';
+import type {CameraState} from './optical-scene';
 import type {CardDef,PropField} from '../types';
 import {createOpticalScene,type OpticalScene,type OpticalSettings} from './optical-scene';
 
@@ -26,9 +28,7 @@ export const ProductScene:React.FC<Record<string,unknown>>=(props)=>{
  const p={...defaults,...props},frame=useCurrentFrame(),{width,height,durationInFrames}=useVideoConfig();
  const canvas=useRef<HTMLCanvasElement>(null),engine=useRef<OpticalScene|null>(null);
  const count=Number(p.duration)||durationInFrames;
- const t=Math.max(0,Math.min(1,frame/Math.max(1,count-1))),ease=(1-Math.cos(t*Math.PI))/2;
- const mix=(a:string,b:string)=>Number(p[a])+(Number(p[b])-Number(p[a]))*ease;
- const state={yaw:mix('yawStart','yawEnd'),pitch:mix('pitchStart','pitchEnd'),zoom:mix('zoomStart','zoomEnd'),panX:Number(p.panX),panY:Number(p.panY),aperture:Number(p.aperture),u:Number(p.focusU),v:Number(p.focusV)};
+ const state=(p.__editorPose as CameraState | undefined) ?? sampleMotion(resolveMotion(p,count),frame);
  const effects=Object.fromEntries(['light','lightX','grain','shadow','shine','fade','vignette','exposure','rounding','maskMode','maskSize','maskSoft'].map(k=>[k,Number(p[k])]));
  const settings:OpticalSettings={src:staticFile(String(p.src)),width,height,start:state,effects,effectsEnabled:Boolean(p.effectsEnabled),layerDepth:0,backgroundColor:String(p.backgroundColor),fadeColor:String(p.fadeColor),mediaAspect:Number(p.mediaAspect)};
  const latest=useRef({settings,state});latest.current={settings,state};

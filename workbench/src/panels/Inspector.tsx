@@ -1,3 +1,4 @@
+import {ProductDirection} from "./ProductDirection";
 import React, { useRef } from "react";
 import type { PropField } from "../cards/types";
 import { cardFps, inOffsetFps, sourceLength } from "../cards/types";
@@ -178,6 +179,7 @@ export const Inspector: React.FC = () => {
       </div>
 
       <div className="inspector-scroll">
+        {card?.id === "product-optical-scene" && <ProductDirection key={clip.id} clip={clip} props={themedProps(MANIFEST,card,project.themeId,clip.props,project.themeColors)} />}
         {card && card.schema.length > 0 && (() => {
           const values = themedProps(MANIFEST, card, project.themeId, clip.props, project.themeColors);
           const renderField = (field: PropField) => (
@@ -193,7 +195,7 @@ export const Inspector: React.FC = () => {
           const assigned = new Set(card.inspectorGroups.flatMap((group) => group.fields));
           const remaining = card.schema.filter((field) => !assigned.has(field.key));
           return <>
-            {card.inspectorGroups.map((group) => (
+            {card.inspectorGroups.filter(group => card.id !== "product-optical-scene" || !["start","end","position","focus"].includes(group.id)).map((group) => (
               <details className="prop-group" key={`${card.id}:${group.id}`} open={group.open}>
                 <summary className="sec-title">{tx(group.label)}</summary>
                 <div className="prop-group-body">
