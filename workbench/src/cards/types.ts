@@ -62,6 +62,8 @@ export interface CardDef {
   height?: number;
   component: React.ComponentType<Record<string, unknown>>;
   schema: PropField[];
+  /** Optional inspector sections; ungrouped cards retain the native layout. */
+  inspectorGroups?: { id: string; label: string; fields: string[]; open?: boolean }[];
   /** 素材库色签 */
   accent?: string;
   /** 把 clip 的源时长（帧）注入到该 prop——成片组件用 `duration`/`dur` 算出场淡出时，

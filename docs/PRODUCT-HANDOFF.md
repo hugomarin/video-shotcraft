@@ -56,6 +56,23 @@ Contiene controles de cámara y acabado, inspector plegable, carga de imagen/vid
 Esto describe el prototipo previo, no capacidades ya migradas a Shotcraft. La grabación depende de permiso del navegador; no asumir captura automatizada validada. No hay una solución de audio integrada en ese prototipo.
 
 ## Próximas entregas, en orden
+### Plan acordable tras revisar las referencias — 2026-11-07
+Prioridad aclarada por Hugo: herramienta propia para lograr tomas inspiradas en Linear con poco esfuerzo. Shotcraft es la base para reutilizar editor y recetas; no presupone construir una plataforma completa. El agente prepara una propuesta y la persona dirige los mismos parámetros visualmente. Este plan está propuesto, no implementado.
+
+Referencias revisadas: grabaciones de las 4.52.39 p.m. (tarjetas de entornos, 20.795 s) y 5.14.50 p.m. (interfaz con escritura, 18.628 s), del 2026-11-06. Se inspeccionaron secuencias a un fotograma por segundo y detalles ampliados. No se ha determinado su implementación interna; los archivos de referencia permanecen fuera del repositorio.
+
+1. **Prueba óptica antes del rediseño.** Comparar la escena actual con perspectiva de óptica larga y una alternativa ortográfica, manteniendo composición y contenido. Separar orientación, encuadre, distancia y óptica. Comparar el shader actual con una solución de profundidad de campo basada en profundidad de escena compatible con nuestro render. Evaluar foco cercano/lejano, halos, legibilidad, estabilidad temporal y coste. Entrega: una toma sintética de 6–8 s con inicio/mitad/final y MP4; decidir el enfoque por resultado visual.
+2. **Modelo e inspector de dirección.** Versionar escena y migrar datos existentes; añadir trayectorias de posición y foco, además de giro/inclinación/encuadre. Foco con clic, fijar/ver inicio-final, reset por sección, panel plegable y controles avanzados separados. Aceptación: misma escena editable por agente y persona, sin saltos al guardar posiciones, undo/redo y persistencia correctos; visor y timeline visibles.
+3. **Tres recetas completas.** Recorrido de interfaz, revelado de detalle y exploración de tarjetas. Empezar por las dos de plano único; completar tarjetas cuando existan activos separados. Adaptar recetas nativas seleccionadas exponiendo constantes como propiedades. Incorporar ritmo, cámara, foco y acabado, con variantes clara/oscura. Aceptación: reemplazar contenido y ajustar pocos controles; A→B→A exacto y recuperación del estado personalizado.
+4. **Contenido en movimiento.** Importar video, proporción/duración automáticas, recorte y errores claros; sincronizar contenido y cámara por frame. Definir explícitamente audio original, silencio y mezcla. Aceptación: buscar cualquier instante y renderizar un clip corto con escritura, comprobando correspondencia de preview/exportación y audio. La tarjeta multimedia existente no equivale a video integrado en el shader óptico.
+5. **Elementos separados y dirección por referencia.** Importar activos/SVG/DOM como capas revisables con profundidad real y foco compartido. Eliminar cualquier dependencia de recortes específicos de un dashboard antes de habilitar capas. Preparar propuestas del agente en el mismo esquema versionado. Captura web reproducible después de validar video importado.
+
+Decisión técnica propuesta: conservar Remotion como única fuente de tiempo y Three.js como base gráfica. GSAP no está declarado en el workbench ni se usa en la card de producto actual; incorporarlo solo si simplifica una coreografía concreta, siempre evaluado por frame. El renderer actual usa un shader de 48 muestras, distancia fija 14.4 y óptica 6.3 × zoom; no es una cámara física convencional. Instalar otra biblioteca no constituye una mejora de calidad validada.
+
+Validación transversal por entrega: build y tests de plataforma; en cambios visuales, inicio/mitad/final, contenido claro/oscuro y MP4 corto; para estado, presets, undo/redo y recarga; para video, seek y audio. Comparar rendimiento de preview y coste de exportación antes de elegir calidad por defecto.
+
+Sesión local de revisión: el puerto 5198 estaba ocupado por Vite de la ubicación anterior y devolvía 404. Se inició el checkout actual en http://127.0.0.1:5199/?product=1, sin detener aquel proceso. Esto es una URL de sesión, no un cambio del puerto por defecto. La página cargó sin errores de consola; no se repitió un render MP4 en esta revisión.
+
 ### 1. Base reproducible — implementada
 Card nativa y muestra sintética incluidas. Los valores por defecto apuntan al SVG público. La carga de textura sucede antes de crear el renderer para evitar dejar un contexto WebGL vivo cuando falla la imagen. Build, tests y MP4 verificados.
 Aceptación: otra persona clona, instala, abre el modo producto y renderiza sin archivos externos de Hugo.
@@ -96,3 +113,8 @@ Priorizar MP4 reproducible y proyecto portable con medios. Evaluar HyperFrames c
 Lee AGENTS.md y este handoff. Inspecciona git status y la card experimental antes de modificar. Continúa con la entrega 2: modelo de escena e inspector. Revisa primero la muestra pública y la óptica actual. Conserva el prototipo anterior. Reporta qué está implementado, qué se verificó y qué queda pendiente.
 
 Verificación adicional: una copia limpia de los archivos preparados instaló con `npm ci`, compiló y renderizó el frame 90 sin medios privados. El preview local cargó la card pública sin errores de JavaScript.
+
+## Mejora del inspector — 2026-11-07
+Implementada agrupación opcional nativa mediante `CardDef.inspectorGroups`. La escena de producto usa secciones plegables independientes: Imagen, Cámara inicio/final, Posición, Enfoque, Acabado, Fondo, Superficie, Fundido y viñeta, Máscara. Etiquetas abreviadas; claves, valores y render conservados. Timing & Speed y Layer siguen siendo las secciones originales de Shotcraft. Las tarjetas sin grupos conservan su presentación anterior.
+
+Verificado: build, cinco tests de plataforma, apertura simultánea de secciones y revisión visual en el demo local. Se mantiene la advertencia de tamaño del bundle. No se renderizó MP4 ni se validaron presets en este cambio de presentación; presets y acciones fijar/ver inicio-final siguen pendientes. Las nuevas etiquetas continúan en español y no se ha añadido español como idioma global del editor.

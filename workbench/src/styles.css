@@ -427,3 +427,9 @@ body {
 .palette-actions { display:flex; gap:4px; margin-top:7px; }
 .palette-actions .btn { flex:1; min-width:0; padding:5px 2px; font-size:10px; }
 .palette-name:focus-visible,.saved-palette button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+
+/* Native schema sections for cards with grouped controls. */
+.prop-group { border-bottom: 1px solid var(--line); }
+.prop-group > summary.sec-title { cursor: pointer; padding: 12px 0; margin: 0; border-bottom: 0; user-select: none; }
+.prop-group > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.prop-group-body { padding: 4px 0 8px; }

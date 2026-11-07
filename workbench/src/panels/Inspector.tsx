@@ -178,21 +178,33 @@ export const Inspector: React.FC = () => {
       </div>
 
       <div className="inspector-scroll">
-        {card && card.schema.length > 0 && (
-          <section>
-            <div className="sec-title">{t("insp.contentStyle")}</div>
-            {card.schema.map((field) => (
-              <Row key={field.key} label={tx(field.label)}>
-                <PropControl
-                  field={field}
-                  value={themedProps(MANIFEST, card, project.themeId, clip.props, project.themeColors)[field.key] ?? field.default}
-                  onChange={(v) => updateClipProps(clip.id, { [field.key]: v })}
-                  onBegin={begin}
-                />
-              </Row>
+        {card && card.schema.length > 0 && (() => {
+          const values = themedProps(MANIFEST, card, project.themeId, clip.props, project.themeColors);
+          const renderField = (field: PropField) => (
+            <Row key={field.key} label={tx(field.label)}>
+              <PropControl field={field} value={values[field.key] ?? field.default}
+                onChange={(v) => updateClipProps(clip.id, { [field.key]: v })} onBegin={begin} />
+            </Row>
+          );
+          if (!card.inspectorGroups) return (
+            <section><div className="sec-title">{t("insp.contentStyle")}</div>
+              {card.schema.map(renderField)}</section>
+          );
+          const assigned = new Set(card.inspectorGroups.flatMap((group) => group.fields));
+          const remaining = card.schema.filter((field) => !assigned.has(field.key));
+          return <>
+            {card.inspectorGroups.map((group) => (
+              <details className="prop-group" key={`${card.id}:${group.id}`} open={group.open}>
+                <summary className="sec-title">{tx(group.label)}</summary>
+                <div className="prop-group-body">
+                  {group.fields.map((key) => card.schema.find((field) => field.key === key))
+                    .filter((field): field is PropField => !!field).map(renderField)}
+                </div>
+              </details>
             ))}
-          </section>
-        )}
+            {remaining.length > 0 && <section><div className="sec-title">{t("insp.contentStyle")}</div>{remaining.map(renderField)}</section>}
+          </>;
+        })()}
 
         <section>
           <div className="sec-title">{t("insp.timing")}</div>
