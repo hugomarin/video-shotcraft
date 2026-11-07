@@ -1,3 +1,4 @@
+import {validateProject} from "./cards/product/project-contract.mjs";
 import React, { useEffect, useRef, useState } from "react";
 import { LibraryPanel } from "./panels/LibraryPanel";
 import { Inspector } from "./panels/Inspector";
@@ -172,8 +173,12 @@ export const App: React.FC = () => {
   const importJson = (file: File) => {
     file.text().then((text) => {
       try {
-        const p = JSON.parse(text) as ProjectData;
+        const parsed = JSON.parse(text);
+        const p = (parsed.project ?? parsed) as ProjectData;
         if (!p || !Array.isArray(p.tracks)) throw new Error("bad format");
+        const productOnly={...p,tracks:p.tracks.map(track=>({...track,clips:track.clips.filter(clip=>clip.cardId==="product-optical-scene")}))};
+        const result=validateProject(productOnly);
+        if(!result.ok)throw new Error(result.errors.join("\n"));
         useStore.getState().setProject(p);
       } catch {
         window.alert(t("import.invalid"));
