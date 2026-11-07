@@ -1,6 +1,6 @@
 # Product Studio sobre Shotcraft
 
-Integración experimental para convertir una imagen de producto en una escena con cámara, enfoque selectivo y acabado editable. La muestra **Orbit** es un dashboard sintético original con datos ficticios; no requiere capturas privadas.
+Integración experimental para convertir imágenes, videos o capturas estáticas de páginas web en una escena con cámara, enfoque selectivo y acabado editable. La muestra **Orbit** es un dashboard sintético original con datos ficticios; no requiere capturas privadas.
 
 ## Abrir
 Desde la raíz del repositorio:
@@ -30,7 +30,7 @@ La configuración está en `examples/product-scene.json`; cambiar `project.track
 - Integración con timeline, propiedades e historial existentes de Shotcraft.
 
 ## Pendiente
-Video como textura, captura web, carga de medios desde el inspector, capas semánticas, presets reversibles, foco con clic y adaptación HyperFrames. El prototipo anterior permanece separado como referencia de migración.
+Capas semánticas, foco con clic, captura de interacciones web, traducción automática de referencias visuales y adaptación HyperFrames. Imagen/video, captura estática por CLI y presets reversibles ya están disponibles. El prototipo anterior permanece separado como referencia de migración.
 
 ## Validación
 Build TypeScript/Vite y cinco tests de plataforma pasan. Se renderizó el MP4 completo y se inspeccionaron inicio/mitad/final. La óptica sigue siendo experimental; este ejemplo demuestra el pipeline, no una equivalencia visual exacta con Linear. El build conserva una advertencia de tamaño del bundle.
@@ -61,7 +61,7 @@ Predeterminados anteriores conservados: perspectiva, distancia 14.4, 48 muestras
 ```sh
 npx remotion render src/remotion/index.ts Main exports/product-optics.mp4 --props=examples/product-optics.json --codec=h264
 ```
-Para abrirlo en el editor, importa el objeto `project` del ejemplo (el archivo completo es la envoltura de props del CLI). Los medios sintéticos están incluidos; el video resultante queda fuera de Git.
+Para abrirlo en el editor, importa el archivo completo o su objeto `project`; ambas formas son admitidas. Los medios sintéticos están incluidos; el video resultante queda fuera de Git.
 
 ## Recetas y agentes
 El inspector ofrece Recorrido claro, Recorrido oscuro y Revelar detalle. Aplicar sustituye todos los ajustes visuales y conserva el material. A→B→A es exacto; **Volver a mis ajustes** restaura la configuración anterior a explorar recetas. **Guardar mis ajustes** establece una nueva base personalizada. Cada acción es reversible con undo/redo.
@@ -90,3 +90,17 @@ node workbench/scripts/generate-video-example.mjs
 node workbench/scripts/product.mjs render workbench/exports/video-example.json --out /tmp/video-test.mp4
 ```
 El generador produce un patrón de video con tono sintético en exports; no requiere medios privados. El contenido se selecciona por fotograma de origen y se usa el mismo cálculo para seek y render. La carga de textura reutiliza el contexto gráfico; al exportar espera a que el fotograma esté cargado. La reproducción del visor puede perder fluidez con archivos grandes; la exportación no depende de esa velocidad de reproducción.
+
+## Capturar una página y transportar el proyecto
+Desde la raíz del repo, con el servidor local encendido:
+```sh
+node workbench/scripts/product.mjs capture --url http://127.0.0.1:5198/product-demo/page.html --out /tmp/web-project.json
+node workbench/scripts/product.mjs pack /tmp/web-project.json --out /tmp/web-bundle
+node workbench/scripts/product.mjs validate /tmp/web-bundle/project.json --assets /tmp/web-bundle/public
+node workbench/scripts/product.mjs render /tmp/web-bundle/project.json --assets /tmp/web-bundle/public --out /tmp/web-film.mp4
+```
+`capture` acepta HTTP(S), abre un perfil limpio y captura el viewport (1600×1000 por defecto). Opciones: `--width`, `--height`, `--wait` en milisegundos, `--recipe` y `--browser`. No hereda sesiones personales ni graba clics/scroll; para interacciones utiliza un video. Una página con carga tardía puede requerir ajustar la espera o revisar la captura. Usa páginas públicas o autorizadas. La muestra HTML incluida es sintética. La captura queda en public/imports y no se publica por Git.
+
+`pack` crea un directorio nuevo con project.json, public/ y manifest.json (tamaño y SHA-256 de cada material). Incluye todos los fotogramas y el audio referenciado; no incluye el motor. En otro clon compatible puedes renderizar con `--assets` sin copiar materiales al repo. Para editar allí, copia el contenido de public/ del paquete a workbench/public/ antes de importar project.json. El inspector no importa carpetas de paquetes todavía. Tanto el JSON directo como la envoltura `{project: ...}` pueden abrirse en el editor; las escenas de producto se validan antes de reemplazar el proyecto actual.
+
+Esto proporciona herramientas semánticas para que un agente construya una propuesta. No incluye un modelo que analice automáticamente cualquier video de referencia ni garantiza reproducir la estética de Linear.

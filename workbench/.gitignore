@@ -33,3 +33,4 @@ public/product-demo/*
 !public/product-demo/dashboard.svg
 
 !public/product-demo/dashboard-dark.svg
+!public/product-demo/page.html

@@ -1,6 +1,9 @@
 # Traspaso de producto — Product Studio sobre Shotcraft
 Fecha de corte: 2026-11-07.
 
+## Estado actual resumido
+Primera versión funcional en ramas encadenadas del fork, PRs #2–#7 (sin fusionar). Incluye inspector agrupado, keyframes explícitos, óptica ajustable, recetas reversibles, importación de imagen/video con audio opcional, captura estática de URL por CLI, catálogo semántico, JSON completo y empaquetado de materiales. El detalle de cada entrega y sus pruebas está al final. La estética sigue requiriendo evaluación perceptual con Hugo; no hay traducción automática de referencias ni captura de interacciones web.
+
 ## Qué queremos construir
 Un estudio para producir videos de producto digital con calidad cinematográfica a partir de imágenes, videos de uso real y páginas web. La persona puede dar una referencia visual y dirigir la escena; un agente prepara una propuesta editable con recetas reutilizables. El resultado debe conservar el detalle y la legibilidad de la aplicación.
 
@@ -110,7 +113,7 @@ Priorizar MP4 reproducible y proyecto portable con medios. Evaluar HyperFrames c
 - Comparar la misma composición al evaluar cambios: no confundir menos zoom con mejor óptica.
 
 ## Primera instrucción para retomar
-Lee AGENTS.md y este handoff. Inspecciona git status y la card experimental antes de modificar. Continúa con la entrega 2: modelo de escena e inspector. Revisa primero la muestra pública y la óptica actual. Conserva el prototipo anterior. Reporta qué está implementado, qué se verificó y qué queda pendiente.
+Lee AGENTS.md y este handoff. Inspecciona git status y la card experimental antes de modificar. Las entregas de implementación se registran abajo. La siguiente revisión es perceptual: comparar el resultado con las referencias de Hugo y priorizar legibilidad, foco y acabado. Revisa primero la muestra pública y la óptica actual. Conserva el prototipo anterior. Reporta qué está implementado, qué se verificó y qué queda pendiente.
 
 Verificación adicional: una copia limpia de los archivos preparados instaló con `npm ci`, compiló y renderizó el frame 90 sin medios privados. El preview local cargó la card pública sin errores de JavaScript.
 
@@ -140,3 +143,10 @@ Verificado: build, 13 pruebas de producto y cinco de plataforma. Navegador aisla
 Rama `codex/product-media`: importación local por CLI y panel nativo, FFmpeg para secuencia PNG30 y WAV opcional, recorte previo explícito, sincronización por frame y audio fuera de Freeze. La textura se reemplaza sin recrear el contexto WebGL. Recetas preservan material/trim/audio. Los medios quedan ignorados en public/imports. Generador sintético incluido para reproducir desde un clon limpio con FFmpeg.
 
 Verificado: build; 16 tests de producto y cinco tests de plataforma. El test de exportación se actualizó para aislar el nuevo plugin de medios. Carga de video desde navegador aislado y seek inicio→final→inicio con igualdad de píxeles al volver. CLI import/render: MP4 de 60 frames, 960×600/30fps, audio no silencioso; fotogramas 0/30/59 muestran los tiempos correctos del patrón sintético. El contenedor AAC reporta 2.048 s de audio frente a 2 s de video (padding del codec). Pendiente evaluación perceptual con contenido de producto real y límites de rendimiento/disco. Captura URL y empaquetado de assets aún pendientes.
+
+## Captura y portabilidad — 2026-11-07
+Rama `codex/product-capture`, sobre `codex/product-media`: captura estática HTTP(S) en perfil limpio; CLI pack con JSON completo, materiales y manifiesto SHA-256; validate/render aceptan raíz alternativa de assets. La importación del editor acepta JSON directo o envoltura project y rechaza escenas de producto inválidas conservando el proyecto abierto. Ejemplo HTML sintético incluido. El adaptador de captura usa el cliente CDP de la versión fijada de Remotion; revisar al actualizar esa dependencia.
+
+Verificado: build, 18 tests de producto y cinco de plataforma. Captura del HTML servido localmente, empaquetado y render usando únicamente la raíz de materiales del paquete: H.264 de 180 frames, 1920×1200, seis segundos; inspeccionados frames 0/90/179. Paquete de video sintético con 61 archivos (60 PNG y WAV) validado y renderizado desde su raíz alternativa. En navegador aislado: importación del JSON capturado y rechazo de versión inválida sin reemplazar el proyecto, sin errores JS. Se conserva la advertencia de tamaño de bundle. No se probaron sitios externos autenticados; no se grabaron interacciones. No se publicó material privado ni se fusionaron PRs.
+
+Próximo paso: revisión visual de Hugo en el demo local y una toma real autorizada. Pendientes de producto: foco con clic, capas explícitas, captura interactiva y mejor tratamiento de profundidad/luz; evaluar rendimiento con clips largos. El agente puede usar el catálogo y crear JSON, pero no existe un traductor automático de cualquier referencia visual. HyperFrames sigue siendo opcional futuro.
