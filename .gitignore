@@ -34,3 +34,7 @@ PRODUCT.md
 /shot-polish/after-v1/
 /shot-polish/final/
 /shot-polish/_work/
+
+# External skill fetched locally from skills.lock.json; do not republish upstream content.
+/.agents/skills/remotion-best-practices/
+/.agents/skills/.skill-install-*/
