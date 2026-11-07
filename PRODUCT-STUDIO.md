@@ -62,3 +62,18 @@ Predeterminados anteriores conservados: perspectiva, distancia 14.4, 48 muestras
 npx remotion render src/remotion/index.ts Main exports/product-optics.mp4 --props=examples/product-optics.json --codec=h264
 ```
 Para abrirlo en el editor, importa el objeto `project` del ejemplo (el archivo completo es la envoltura de props del CLI). Los medios sintéticos están incluidos; el video resultante queda fuera de Git.
+
+## Recetas y agentes
+El inspector ofrece Recorrido claro, Recorrido oscuro y Revelar detalle. Aplicar sustituye todos los ajustes visuales y conserva el material. A→B→A es exacto; **Volver a mis ajustes** restaura la configuración anterior a explorar recetas. **Guardar mis ajustes** establece una nueva base personalizada. Cada acción es reversible con undo/redo.
+
+Desde la raíz del repo:
+```sh
+node workbench/scripts/product.mjs catalog
+node workbench/scripts/product.mjs create --asset product-demo/dashboard.svg --recipe interface-light --out /tmp/product.json
+node workbench/scripts/product.mjs validate /tmp/product.json
+node workbench/scripts/product.mjs snapshot /tmp/product.json --out /tmp/product-portable.json
+node workbench/scripts/product.mjs render /tmp/product.json --out /tmp/product.mp4
+```
+El catálogo describe cuándo usar cada receta, controles, unidades y operaciones. El JSON creado se importa directamente con Import en Workbench. La validación CLI se limita a escenas `product-optical-scene`, revisa parámetros y existencia de materiales locales. No valida montajes generales de Shotcraft. `snapshot` materializa valores y quita metadatos de exploración; los assets siguen siendo archivos externos en public. Las salidas CLI no sobrescriben archivos existentes. Render admite `--browser /ruta/al/navegador`.
+
+`examples/product-recipes.json` contiene las tres recetas con medios sintéticos. La receta oscura no convierte una imagen clara en oscura: el contenido y el acabado son decisiones distintas.
