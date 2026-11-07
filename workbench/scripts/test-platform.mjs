@@ -40,6 +40,7 @@ test("failed asset copy ends the export response, cleans props and permits a ret
   let launches = 0;
   const mocks = {
     vite: { defineConfig: config => config },
+    "./scripts/media-plugin.mjs": { mediaImportPlugin: () => ({name: "product-media-import"}) },
     "@vitejs/plugin-react": () => ({}),
     "node:child_process": { spawn: () => {
       launches++;

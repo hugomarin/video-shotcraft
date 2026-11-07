@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import {resolveOptics} from './optics.mjs';
 export async function createOpticalScene(canvas,settings){
 let optics=resolveOptics(settings,settings.start),current={...settings.start},effects={maskMode:0,maskSize:65,maskSoft:35,...settings.effects},enabled=settings.effectsEnabled,layerDepth=settings.layerDepth,backgroundColor=settings.backgroundColor,fadeColor=settings.fadeColor,fxDefaults=effects;
-const texture=await new THREE.TextureLoader().loadAsync(settings.src);
+let texture=await new THREE.TextureLoader().loadAsync(settings.src);
+let textureSource=settings.src,sourceGeneration=0,disposed=false;
 const renderer=new THREE.WebGLRenderer({canvas,antialias:false,alpha:false,preserveDrawingBuffer:true});renderer.setPixelRatio(1);renderer.setSize(settings.width,settings.height,false);
 texture.flipY=false;texture.minFilter=THREE.LinearFilter;texture.magFilter=THREE.LinearFilter;
 const uniforms={orthographic:{value:0},sampleCount:{value:48},mediaAspect:{value:2912/1770},img:{value:texture},aspect:{value:1.6},yaw:{value:0},pitch:{value:0},distance:{value:4.8},focus:{value:4.8},aperture:{value:.1},pan:{value:new THREE.Vector2()},bg:{value:new THREE.Vector3(.07,.07,.07)}};
@@ -55,5 +56,11 @@ function draw(){function rgb(hex){return [1,3,5].map(i=>parseInt(hex.slice(i,i+2
 
 
 uniforms.aspect.value=settings.width/settings.height;
-return {update(next,state){optics=resolveOptics(next,state);current=state;effects=next.effects;enabled=next.effectsEnabled;layerDepth=next.layerDepth;backgroundColor=next.backgroundColor;fadeColor=next.fadeColor;uniforms.mediaAspect.value=next.mediaAspect||2912/1770;draw()},dispose(){texture.dispose();material.dispose();scene.children[0].geometry.dispose();renderer.dispose()}};
+return {async setSource(src){
+ const generation=++sourceGeneration;if(src===textureSource)return;
+ const candidate=await new THREE.TextureLoader().loadAsync(src);
+ if(disposed||generation!==sourceGeneration){candidate.dispose();return;}
+ candidate.flipY=false;candidate.minFilter=THREE.LinearFilter;candidate.magFilter=THREE.LinearFilter;
+ texture.dispose();texture=candidate;textureSource=src;uniforms.img.value=texture;
+},update(next,state){optics=resolveOptics(next,state);current=state;effects=next.effects;enabled=next.effectsEnabled;layerDepth=next.layerDepth;backgroundColor=next.backgroundColor;fadeColor=next.fadeColor;uniforms.mediaAspect.value=next.mediaAspect||2912/1770;draw()},dispose(){disposed=true;sourceGeneration++;texture.dispose();material.dispose();scene.children[0].geometry.dispose();renderer.dispose()}};
 }

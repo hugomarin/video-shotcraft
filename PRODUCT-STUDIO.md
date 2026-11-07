@@ -77,3 +77,16 @@ node workbench/scripts/product.mjs render /tmp/product.json --out /tmp/product.m
 El catálogo describe cuándo usar cada receta, controles, unidades y operaciones. El JSON creado se importa directamente con Import en Workbench. La validación CLI se limita a escenas `product-optical-scene`, revisa parámetros y existencia de materiales locales. No valida montajes generales de Shotcraft. `snapshot` materializa valores y quita metadatos de exploración; los assets siguen siendo archivos externos en public. Las salidas CLI no sobrescriben archivos existentes. Render admite `--browser /ruta/al/navegador`.
 
 `examples/product-recipes.json` contiene las tres recetas con medios sintéticos. La receta oscura no convierte una imagen clara en oscura: el contenido y el acabado son decisiones distintas.
+
+## Importar imagen o video
+En **Importar contenido**, elige un archivo local; para video indica inicio y duración en segundos antes de cargarlo. Admite hasta 200 MB y 120 s por importación. Requiere FFmpeg/ffprobe en PATH. El material queda en `workbench/public/imports/` (ignorado por Git). Los videos se preparan como PNG a 30 fps y audio WAV separado; esto consume más disco que el original. La imagen conserva proporción; el video se limita a 1920 px de ancho. El panel ajusta la duración del clip y redistribuye sus dos poses guardadas al nuevo contenido.
+
+**Audio original** está desactivado al importar. Al activarlo, recorte y velocidad del timeline se aplican también al audio. Tras agotar la secuencia se mantiene el último fotograma; el audio termina. No se ha implementado mezcla de varias fuentes dentro de esta escena. Para cambiar una secuencia por una imagen usa Importar contenido; editar solo la ruta no elimina una secuencia existente.
+
+Para agentes:
+```sh
+node workbench/scripts/product.mjs import --input /ruta/video.mp4 --start 0 --seconds 10 --recipe interface-light --out /tmp/video-project.json
+node workbench/scripts/generate-video-example.mjs
+node workbench/scripts/product.mjs render workbench/exports/video-example.json --out /tmp/video-test.mp4
+```
+El generador produce un patrón de video con tono sintético en exports; no requiere medios privados. El contenido se selecciona por fotograma de origen y se usa el mismo cálculo para seek y render. La carga de textura reutiliza el contexto gráfico; al exportar espera a que el fotograma esté cargado. La reproducción del visor puede perder fluidez con archivos grandes; la exportación no depende de esa velocidad de reproducción.

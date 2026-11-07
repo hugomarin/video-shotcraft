@@ -1,6 +1,7 @@
 import React from "react";
+import {validateMedia} from '../cards/product/media.mjs';
 import type {PosePreview} from "../productPreview";
-import { AbsoluteFill, Freeze, Sequence, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, staticFile, Freeze, Sequence, useCurrentFrame } from "remotion";
 import type { ProjectData } from "../types";
 import { CARDS } from "../cards/registry";
 import { MANIFEST } from '../cards/projectCards';
@@ -46,8 +47,10 @@ export const MainComposition: React.FC<{ project: ProjectData; posePreview?:Pose
                 </Sequence>
               );
             }
+            const media=clip.cardId==='product-optical-scene' && props.media ? validateMedia(props.media) : null;
             return (
               <Sequence key={clip.id} from={clip.start} durationInFrames={duration}>
+                {media?.audio && props.audioEnabled === true && <Audio src={staticFile(media.audio)} trimBefore={Math.round(((media.trimStart??0)/media.fps+clip.inOffset/30)*project.fps)} playbackRate={clip.speed*project.fps/30} />}
                 <AbsoluteFill
                   style={{
                     opacity: clip.opacity,

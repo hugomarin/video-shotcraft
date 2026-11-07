@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync, cpSync } fro
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { mediaImportPlugin } from "./scripts/media-plugin.mjs";
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 
@@ -180,7 +181,7 @@ const renderExportPlugin = (): Plugin => {
 };
 
 export default defineConfig({
-  plugins: [react(), renderExportPlugin()],
+  plugins: [mediaImportPlugin(root), react(), renderExportPlugin()],
   // 5198：与 video-talkcraft 的工作台（5199）错开，两边可同时开
   server: { port: 5198, strictPort: true },
   resolve: {
