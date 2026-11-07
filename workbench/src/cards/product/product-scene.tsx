@@ -8,7 +8,8 @@ import type {CardDef} from '../types';
 import {createOpticalScene,type OpticalScene,type OpticalSettings} from './optical-scene';
 
 export const ProductScene:React.FC<Record<string,unknown>>=(props)=>{
- const p={...defaults,...props},frame=useCurrentFrame(),{width,height,durationInFrames}=useVideoConfig();
+ const p={...defaults,...props},localFrame=useCurrentFrame(),{width,height,durationInFrames}=useVideoConfig();
+ const frame=Math.max(0,Number(props.__sourceOffset??0)+localFrame*Number(props.__sourceSpeed??1));
  const canvas=useRef<HTMLCanvasElement>(null),engine=useRef<OpticalScene|null>(null);
  const count=Number(p.duration)||durationInFrames;
  const state=(p.__editorPose as CameraState | undefined) ?? sampleMotion(resolveMotion(p,count),frame);
