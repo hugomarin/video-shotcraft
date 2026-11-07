@@ -1,5 +1,6 @@
 const slider=(key,label,value,min,max,step=1)=>({type:'slider',key,label,default:value,min,max,step});
 export const schema=[
+ {type:'boolean',key:'audioEnabled',label:'Audio original',default:false},
  {type:'text',key:'src',label:'Ruta de imagen',default:'product-demo/dashboard.svg'},
  slider('mediaAspect','Proporción',16/10,.5,3,.01),
  {type:'select',key:'projection',label:'Proyección',default:'perspective',options:[{value:'perspective',label:'Perspectiva'},{value:'orthographic',label:'Paralela'}]},

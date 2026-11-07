@@ -1,3 +1,4 @@
+import {validateMedia} from './media.mjs';
 import {schema} from './schema.mjs';
 import {resolveMotion,clipMotionRange} from './motion.mjs';
 import {resolveOptics} from './optics.mjs';
@@ -30,6 +31,7 @@ export function validateProject(input) {
     if(f.type==='text'&&typeof v!=='string')fail(`${c.id}.${f.key}: texto requerido.`);
    }
    if(props.src!==undefined&&!safeAssetPath(props.src))fail(`${c.id}.src: usa una ruta relativa de public.`);
+   if(props.media){try{const m=validateMedia(props.media);if(!safeAssetPath(m.pattern)||(m.audio&&!safeAssetPath(m.audio)))fail(`${c.id}: ruta de secuencia inválida.`);}catch(e){fail(e.message);}}
    if('__editorPose' in props)fail(`${c.id}: la vista de prueba no pertenece al proyecto guardado.`);
    try {resolveMotion(props,clipMotionRange(c).duration);resolveOptics({...props,focusQuality:props.focusQuality===undefined?48:Number(props.focusQuality)},{zoom:1,aperture:0});}catch(e){fail(`${c.id}: ${e.message}`);}
   }

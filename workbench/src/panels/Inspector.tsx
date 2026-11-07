@@ -1,3 +1,4 @@
+import {ProductMedia} from "./ProductMedia";
 import {ProductRecipes} from "./ProductRecipes";
 import {ProductDirection} from "./ProductDirection";
 import React, { useRef } from "react";
@@ -180,6 +181,7 @@ export const Inspector: React.FC = () => {
       </div>
 
       <div className="inspector-scroll">
+        {card?.id === "product-optical-scene" && <ProductMedia key={`media:${clip.id}`} clip={clip} />}
         {card?.id === "product-optical-scene" && <ProductRecipes key={`recipes:${clip.id}`} clip={clip} />}
         {card?.id === "product-optical-scene" && <ProductDirection key={clip.id} clip={clip} props={themedProps(MANIFEST,card,project.themeId,clip.props,project.themeColors)} />}
         {card && card.schema.length > 0 && (() => {
