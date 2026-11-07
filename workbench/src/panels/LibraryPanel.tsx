@@ -244,7 +244,7 @@ export const LibraryPanel: React.FC = () => {
   const projectVisual = MEDIA_ITEMS.filter((m) => m.kind !== "audio");
 
   // 动效库：工作台原生卡靳前，然后按画廊分类
-  const motionGroups = ["工作台", ...DEMO_CATEGORIES]
+  const motionGroups = ["Producto", "工作台", ...DEMO_CATEGORIES]
     .map((cat) => ({ cat, cards: motionCards.filter((c) => c.category === cat) }))
     .filter((g) => g.cards.length > 0);
 

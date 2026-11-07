@@ -17,7 +17,10 @@
     "prestudio": "node scripts/gen-index.mjs",
     "studio": "remotion studio src/remotion/index.ts",
     "open": "node scripts/open.mjs",
-    "parity": "node scripts/parity.mjs"
+    "parity": "node scripts/parity.mjs",
+    "dev:product": "vite --host 127.0.0.1 --port 5198 --open /?product=1",
+    "predev:product": "node scripts/gen-index.mjs",
+    "render:product": "node scripts/gen-index.mjs && remotion render src/remotion/index.ts Main exports/product-demo.mp4 --props=examples/product-scene.json --codec=h264"
   },
   "dependencies": {
     "@react-three/fiber": "9.6.1",

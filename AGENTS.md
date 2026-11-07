@@ -8,7 +8,7 @@ Convertir imágenes, grabaciones de aplicaciones y páginas web en videos de pro
 2. `PRODUCT-STUDIO.md`: mapa de la integración local.
 3. El README y las instrucciones más específicas del área que se vaya a modificar.
 
-Este primer commit aporta documentación. La integración experimental descrita en el handoff todavía vive en la copia local de Hugo y no forma parte de este commit. Comprobar archivos y git status antes de asumir que está disponible. No sobrescribir cambios locales.
+La integración experimental de imagen y la muestra sintética Orbit están incluidas en el repositorio. Ver el handoff para distinguirlas de funciones futuras. Comprobar git status antes de editar y no sobrescribir cambios locales.
 
 ## Reglas de producto
 - La referencia estética es la presentación de producto de Linear: jerarquía clara, movimiento pausado, perspectiva contenida, foco selectivo, luz y sombras suaves. No afirmar que conocemos su implementación interna.

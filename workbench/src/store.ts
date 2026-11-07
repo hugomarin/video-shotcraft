@@ -1,3 +1,4 @@
+import { productProject } from './productProject';
 import { create } from "zustand";
 import type { ClipData, ProjectData, TrackData } from "./types";
 import { uid } from "./types";
@@ -12,7 +13,8 @@ import { t } from "./i18n";
 
 export { projectDuration } from "./types";
 
-const STORAGE_KEY = "shotcraft-workbench-project-v1";
+const productMode=new URLSearchParams(window.location.search).has("product");
+const STORAGE_KEY = productMode?"shotcraft-product-project-v1":"shotcraft-workbench-project-v1";
 
 const loadSaved = (): ProjectData | null => {
   try {
@@ -41,7 +43,7 @@ const loadInitial = (): { project: ProjectData; past: ProjectData[]; imported: b
     if (saved?.source !== manifestKey(MANIFEST))
       return { project: buildProjectFromManifest(MANIFEST), past: saved ? [saved] : [], imported: true };
   }
-  return { project: saved ?? demoProject(), past: [], imported: false };
+  return { project: saved ?? (productMode?productProject():demoProject()), past: [], imported: false };
 };
 const initial = loadInitial();
 
@@ -119,7 +121,7 @@ const mutateProject = (
 
 export const useStore = create<WorkbenchState>((set, get) => ({
   project: initial.project,
-  selectedClipId: null,
+  selectedClipId: productMode ? initial.project.tracks.flatMap(t=>t.clips)[0]?.id ?? null : null,
   playhead: 0,
   playing: false,
   pxPerFrame: 2,

@@ -26,25 +26,27 @@ Capturar una web y darle tratamiento visual son etapas separadas. Para acciones 
 - Fork personal hugomarin/video-shotcraft para colaboración entre equipos.
 
 ## Estado real y disponibilidad
-Este primer commit publica el contexto y las reglas de trabajo. **No publica aún la integración experimental ni medios de trabajo.** Un clon limpio de este commit contiene Shotcraft original más estos documentos.
+La integración experimental de imagen y la muestra sintética Orbit están incluidas. Los medios privados no se publican. Consultar PRODUCT-STUDIO.md para iniciar y renderizar.
 
 ### Base publicada
 Shotcraft upstream en commit `1266a3ec4831289c4d893d42dd5102723658039a`. La inspección local encontró React, Remotion, Three.js, Zustand, Vite, cards con esquema de propiedades, timeline e historial. Muchas recetas demo no exponen parámetros; requieren convertir constantes en propiedades para edición fina.
 
-### Integración experimental local
+### Integración experimental incluida
 Carpeta de Hugo: `/Users/hugomarin/Apps/shotcraft`.
 Rama: `feature/product-scene`. Abrir el modo experimental en http://127.0.0.1:5198/?product=1 después de iniciar Vite.
 
-Archivos presentes solo en el trabajo local al momento de este handoff:
+Archivos de la integración:
 - `workbench/src/cards/product/product-scene.tsx`: card nativa, esquema de controles e interpolación por frame.
 - `workbench/src/cards/product/optical-scene.js` y `.d.ts`: adaptador Three.js y shader de foco.
 - `workbench/src/productProject.ts`: escena inicial de seis segundos, 1920×1200.
 - Cambios en registry, LibraryPanel y store para registrar Producto y separar almacenamiento con `?product=1`.
-- `workbench/public/product/dashboard.png` y `project.json`: medios/proyecto locales ignorados por Git; no publicar.
+- `workbench/public/product-demo/dashboard.svg`: dashboard sintético propio, sin datos reales ni fuentes remotas.
+- `workbench/examples/product-scene.json`: entrada portable para render.
+- `workbench/public/product/dashboard.png` y `project.json`: medios privados locales ignorados por Git; no publicar.
 
 La card actual admite imagen, inicio/final de giro e inclinación/zoom, posición, foco UV, apertura, colores, luz, grano, sombra, brillo, fundido, viñeta, exposición, esquinas y máscaras. Usa 48 muestras de lente sobre un plano: es una aproximación óptica, no un renderizador físico completo. Distancia y óptica todavía requieren diseño y validación perceptual.
 
-Validaciones reportadas en la sesión previa: TypeScript/Vite build, cinco tests de plataforma, preview en navegador y PNG renderizado con Remotion en frame 90. **MP4 completo de la card no validado.** No extender estas conclusiones a video de entrada o capas.
+Validación de esta entrega: TypeScript/Vite build y cinco tests de plataforma; MP4 H.264 de 180 frames, 1920×1200 a 30 fps. Se inspeccionaron los frames 0, 90 y 179. El dashboard es una imagen SVG rasterizada como textura, no capas independientes. No extender estas conclusiones a video de entrada o capas.
 
 ### Estudio anterior: referencia de migración
 Prototipo anterior local: `/Users/hugomarin/Apps/product-assesment/camera-hyperframes` (permanece en su ubicación original).
@@ -54,8 +56,8 @@ Contiene controles de cámara y acabado, inspector plegable, carga de imagen/vid
 Esto describe el prototipo previo, no capacidades ya migradas a Shotcraft. La grabación depende de permiso del navegador; no asumir captura automatizada validada. No hay una solución de audio integrada en ese prototipo.
 
 ## Próximas entregas, en orden
-### 1. Publicar una base reproducible
-Recuperar los cambios locales sin pisarlos. Sustituir la captura privada por un dashboard sintético incluido en Git y cambiar los valores por defecto. Conservar medios privados solo en local. Revisar el renderer, su manejo de errores/recursos y los tipos. Publicar la card en una rama con build, tests, tres frames y un MP4 corto verificados.
+### 1. Base reproducible — implementada
+Card nativa y muestra sintética incluidas. Los valores por defecto apuntan al SVG público. La carga de textura sucede antes de crear el renderer para evitar dejar un contexto WebGL vivo cuando falla la imagen. Build, tests y MP4 verificados.
 Aceptación: otra persona clona, instala, abre el modo producto y renderiza sin archivos externos de Hugo.
 
 ### 2. Consolidar el modelo de escena y el inspector
@@ -91,4 +93,6 @@ Priorizar MP4 reproducible y proyecto portable con medios. Evaluar HyperFrames c
 - Comparar la misma composición al evaluar cambios: no confundir menos zoom con mejor óptica.
 
 ## Primera instrucción para retomar
-Lee AGENTS.md y este handoff. Inspecciona git status y la card experimental antes de modificar. Ejecuta la entrega 1: prepara una muestra sintética portable, revisa la integración local y valida preview/render. Conserva el prototipo anterior. Reporta qué está implementado, qué se verificó y qué queda pendiente.
+Lee AGENTS.md y este handoff. Inspecciona git status y la card experimental antes de modificar. Continúa con la entrega 2: modelo de escena e inspector. Revisa primero la muestra pública y la óptica actual. Conserva el prototipo anterior. Reporta qué está implementado, qué se verificó y qué queda pendiente.
+
+Verificación adicional: una copia limpia de los archivos preparados instaló con `npm ci`, compiló y renderizó el frame 90 sin medios privados. El preview local cargó la card pública sin errores de JavaScript.
