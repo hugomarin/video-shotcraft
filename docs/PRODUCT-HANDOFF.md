@@ -32,7 +32,7 @@ Este primer commit publica el contexto y las reglas de trabajo. **No publica aú
 Shotcraft upstream en commit `1266a3ec4831289c4d893d42dd5102723658039a`. La inspección local encontró React, Remotion, Three.js, Zustand, Vite, cards con esquema de propiedades, timeline e historial. Muchas recetas demo no exponen parámetros; requieren convertir constantes en propiedades para edición fina.
 
 ### Integración experimental local
-Carpeta de Hugo: `/Users/hugomarin/Apps/product-assesment/shotcraft-product-studio`.
+Carpeta de Hugo: `/Users/hugomarin/Apps/shotcraft`.
 Rama: `feature/product-scene`. Abrir el modo experimental en http://127.0.0.1:5198/?product=1 después de iniciar Vite.
 
 Archivos presentes solo en el trabajo local al momento de este handoff:
@@ -47,7 +47,7 @@ La card actual admite imagen, inicio/final de giro e inclinación/zoom, posició
 Validaciones reportadas en la sesión previa: TypeScript/Vite build, cinco tests de plataforma, preview en navegador y PNG renderizado con Remotion en frame 90. **MP4 completo de la card no validado.** No extender estas conclusiones a video de entrada o capas.
 
 ### Estudio anterior: referencia de migración
-Carpeta hermana local: `../camera-hyperframes`.
+Prototipo anterior local: `/Users/hugomarin/Apps/product-assesment/camera-hyperframes` (permanece en su ubicación original).
 Editor: http://127.0.0.1:3030/editor.html cuando su servidor esté activo.
 Contiene controles de cámara y acabado, inspector plegable, carga de imagen/video, recorte de video, captura de frame y grabación de pantalla iniciada por el usuario. Exporta un proyecto HyperFrames con preparación de frames de video por FFmpeg. Conserva medios en IndexedDB y ajustes en localStorage.
 
