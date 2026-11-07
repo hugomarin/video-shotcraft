@@ -1,9 +1,10 @@
+import {FILM_CONTRACT} from './cards/product/film-contract.mjs';
 import { productProject } from './productProject';
 import { create } from "zustand";
 import type { ClipData, ProjectData, TrackData } from "./types";
 import { uid } from "./types";
 import { CARDS } from "./cards/registry";
-import { clipDefaultsFor } from "./cards/types";
+import { clipDefaultsFor, defaultsOf } from "./cards/types";
 import { demoProject } from "./demoProject";
 import { MANIFEST } from "./cards/projectCards";
 import { manifestKey } from "./cards/manifest";
@@ -227,6 +228,7 @@ export const useStore = create<WorkbenchState>((set, get) => ({
         // 反向变速，播放速度不变；媒体卡（realtime）只换算时长、不变速。
         // 拖拽负载里的 duration（素材库给视频 / 音频的默认长度）与 durationInFrames 同口径，一并换算
         const { duration, speed } = clipDefaultsFor(card, d.fps, extra?.duration);
+        if(cardId.startsWith("product-film-"))d.productFilm={...FILM_CONTRACT};
         track.clips.push({
           id: newId,
           cardId,
@@ -238,7 +240,7 @@ export const useStore = create<WorkbenchState>((set, get) => ({
           scale: 1,
           x: 0,
           y: 0,
-          props: extra?.props ?? {},
+          props: cardId.startsWith("product-film-") ? {...defaultsOf(card),...extra?.props} : extra?.props ?? {},
           label: extra?.label,
         });
       }),

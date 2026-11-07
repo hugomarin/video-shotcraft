@@ -1,0 +1,252 @@
+{
+  "project": {
+    "productFilm": {
+      "version": 1,
+      "projection": "css-parallel",
+      "coordinateSpace": "composition-pixels"
+    },
+    "name": "Planar film · portable synthetic example",
+    "fps": 30,
+    "width": 1600,
+    "height": 1000,
+    "background": "#ffffff",
+    "tracks": [
+      {
+        "id": "texts",
+        "name": "Textos",
+        "clips": [
+          {
+            "id": "text-0",
+            "cardId": "product-film-caption-v1",
+            "start": 0,
+            "duration": 60,
+            "inOffset": 0,
+            "speed": 1,
+            "opacity": 1,
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "props": {
+              "content": "Cada dato revela\nuna nueva oportunidad.",
+              "left": 72,
+              "bottom": 66,
+              "fontSize": 62,
+              "color": "#162334",
+              "fontFamily": "Arial, sans-serif",
+              "fontWeight": 500,
+              "lineHeight": 1.08,
+              "letterSpacing": -2.2,
+              "enterStart": 12,
+              "enterEnd": 32,
+              "exitStart": 25,
+              "exitEnd": 10,
+              "rise": 10,
+              "riseEnd": 38
+            },
+            "label": "Texto 1"
+          },
+          {
+            "id": "text-1",
+            "cardId": "product-film-caption-v1",
+            "start": 60,
+            "duration": 60,
+            "inOffset": 0,
+            "speed": 1,
+            "opacity": 1,
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "props": {
+              "content": "Convierte esa oportunidad\nen una propuesta.",
+              "left": 72,
+              "bottom": 66,
+              "fontSize": 62,
+              "color": "#162334",
+              "fontFamily": "Arial, sans-serif",
+              "fontWeight": 500,
+              "lineHeight": 1.08,
+              "letterSpacing": -2.2,
+              "enterStart": 12,
+              "enterEnd": 32,
+              "exitStart": 25,
+              "exitEnd": 10,
+              "rise": 10,
+              "riseEnd": 38
+            },
+            "label": "Texto 2"
+          },
+          {
+            "id": "text-2",
+            "cardId": "product-film-caption-v1",
+            "start": 120,
+            "duration": 60,
+            "inOffset": 0,
+            "speed": 1,
+            "opacity": 1,
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "props": {
+              "content": "Del análisis\na tu siguiente paso.",
+              "left": 72,
+              "bottom": 66,
+              "fontSize": 62,
+              "color": "#162334",
+              "fontFamily": "Arial, sans-serif",
+              "fontWeight": 500,
+              "lineHeight": 1.08,
+              "letterSpacing": -2.2,
+              "enterStart": 12,
+              "enterEnd": 32,
+              "exitStart": 25,
+              "exitEnd": 10,
+              "rise": 10,
+              "riseEnd": 38
+            },
+            "label": "Texto 3"
+          }
+        ]
+      },
+      {
+        "id": "fade",
+        "name": "Degradado de lectura",
+        "clips": [
+          {
+            "id": "gradient",
+            "cardId": "product-film-fade-v1",
+            "start": 0,
+            "duration": 180,
+            "inOffset": 0,
+            "speed": 1,
+            "opacity": 1,
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "props": {
+              "color": "#ffffff",
+              "clearAt": 49,
+              "softAt": 62,
+              "softOpacity": 0.22,
+              "strongAt": 80,
+              "strongOpacity": 0.9,
+              "solidAt": 96
+            },
+            "label": "gradient"
+          }
+        ]
+      },
+      {
+        "id": "shots",
+        "name": "Tomas · inclinación y encuadre",
+        "clips": [
+          {
+            "id": "chart",
+            "cardId": "product-film-plane-v1",
+            "start": 0,
+            "duration": 60,
+            "inOffset": 0,
+            "speed": 1,
+            "opacity": 1,
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "props": {
+              "file": "product-demo/dashboard.svg",
+              "mediaType": "image",
+              "sourceWidth": 1600,
+              "cropX": 0,
+              "cropY": 0,
+              "cropWidth": 1600,
+              "cropHeight": 1000,
+              "centerX": 800,
+              "centerY": 500,
+              "anchorX": 800,
+              "anchorY": 430,
+              "pitch": 18,
+              "yaw": -10,
+              "roll": -7,
+              "scaleStart": 0.9,
+              "scaleEnd": 0.94,
+              "travelY": -12,
+              "edgeSoftness": 5,
+              "fadeFrames": 15,
+              "backgroundColor": "#ffffff"
+            },
+            "label": "Gráfica · por día y acumulados"
+          },
+          {
+            "id": "offer",
+            "cardId": "product-film-plane-v1",
+            "start": 60,
+            "duration": 60,
+            "inOffset": 0,
+            "speed": 1,
+            "opacity": 1,
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "props": {
+              "file": "product-demo/dashboard.svg",
+              "mediaType": "image",
+              "sourceWidth": 1600,
+              "cropX": 0,
+              "cropY": 0,
+              "cropWidth": 1600,
+              "cropHeight": 1000,
+              "centerX": 800,
+              "centerY": 500,
+              "anchorX": 800,
+              "anchorY": 430,
+              "pitch": 12,
+              "yaw": -10,
+              "roll": -7,
+              "scaleStart": 0.9,
+              "scaleEnd": 0.94,
+              "travelY": -12,
+              "edgeSoftness": 5,
+              "fadeFrames": 15,
+              "backgroundColor": "#ffffff"
+            },
+            "label": "Oferta · escritura"
+          },
+          {
+            "id": "result",
+            "cardId": "product-film-plane-v1",
+            "start": 120,
+            "duration": 60,
+            "inOffset": 0,
+            "speed": 1,
+            "opacity": 1,
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "props": {
+              "file": "product-demo/dashboard.svg",
+              "mediaType": "image",
+              "sourceWidth": 1600,
+              "cropX": 0,
+              "cropY": 0,
+              "cropWidth": 1600,
+              "cropHeight": 1000,
+              "centerX": 800,
+              "centerY": 500,
+              "anchorX": 800,
+              "anchorY": 430,
+              "pitch": 12,
+              "yaw": -10,
+              "roll": -7,
+              "scaleStart": 0.9,
+              "scaleEnd": 0.94,
+              "travelY": -12,
+              "edgeSoftness": 5,
+              "fadeFrames": 15,
+              "backgroundColor": "#ffffff"
+            },
+            "label": "Propuesta terminada"
+          }
+        ]
+      }
+    ]
+  },
+  "renderExact": true
+}
