@@ -1,0 +1,4 @@
+interface:
+  display_name: "Storytelling y dirección de arte"
+  short_description: "Guion y propuesta visual para videos de producto"
+  default_prompt: "Usa $product-film-direction para interpretar mis referencias y proponer una historia, tres imágenes clave y un guion musical antes de producir."
