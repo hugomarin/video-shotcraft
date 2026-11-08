@@ -50,7 +50,7 @@ Lee [la plantilla de propuesta](references/proposal.md) al preparar la entrega.
 
 Para los videos de este flujo, Shotcraft es el entorno de edición y su `ProjectData` JSON es la única fuente de verdad desde el principio. Remotion es el motor de preview/render. No crees una composición TSX/HTML independiente para después trasladarla, ni entregues un MP4 aplanado como sustituto del proyecto editable.
 
-- Antes de construir imágenes clave o un animatic, localiza el repositorio Shotcraft y lee `docs/PRODUCT-FILM-CONTRACT.md`; consulta `node workbench/scripts/product-film.mjs catalog` y `workbench/examples/product-film.json`. Usa el contrato y las cards disponibles, no un esquema inventado. Para el estilo paralelo aprobado, utiliza `productFilm` v1 y sus unidades explícitas; no conviertas sus ángulos/recortes a las unidades de la card óptica.
+- Para los próximos videos de este proyecto, usa por defecto la cámara óptica nativa `product-optical-scene` y sus controles de Dirigir toma. Parte de `workbench/examples/product-film-optical.json`; consulta `node workbench/scripts/product.mjs catalog` para cámara, foco, keyframes y medios, y `node workbench/scripts/product-film.mjs catalog` para las pistas editoriales. Lee `docs/PRODUCT-FILM-CONTRACT.md`. Mantén todo en ProjectData y usa la validación y empaquetado de product-film. Conserva el modo paralelo para abrir originales o por elección explícita; no lo uses como sustituto de la óptica ni interpretes sus escalas/píxeles como unidades ópticas.
 - Escribe tomas, tiempos en frames, encuadres, textos, degradado y música en ese JSON. Mantén elementos editables en pistas nativas y archivos relativos a `public/`. Materializa los valores con `snapshot` y valida con `validate` del CLI antes de abrir el proyecto. No reutilices rutas privadas de una prueba anterior como dependencias del formato.
 - Obtén los bocetos y pruebas de movimiento del mismo JSON mediante las cards nativas y `MainComposition`. Una entrada Remotion auxiliar puede limitarse a cargar ese proyecto y renderer compartidos; no debe duplicar geometría, animaciones, textos o tiempos. Las imágenes de referencia externas siguen siendo referencias, no la implementación del montaje.
 - Si falta un efecto, identifica la limitación y su impacto en la propuesta. Si el desarrollo está dentro del alcance autorizado, extiende primero una card/PropField/contrato nativo y después úsalo en el JSON. Si no lo está, entrega la parte representable y deja el efecto pendiente explícitamente. No lo resuelvas por fuera del editor ni afirmes equivalencia aproximada como traslado sin pérdidas.
@@ -64,6 +64,10 @@ Las guías de HyperFrames pueden aportar vocabulario y procedimientos de movimie
 Para implementar en Remotion, carga `remotion-best-practices` instalada y solo las referencias necesarias. Comprueba compatibilidad con la versión del proyecto antes de emplear APIs de una guía más reciente; no actualices paquetes automáticamente.
 
 En Product Studio sobre Shotcraft, conserva editor, timeline y render Remotion. El frame gobierna cámara, contenido y efectos; GSAP es opcional para autoría, no un segundo reloj. Expresa el guion directamente en el JSON nativo con las capacidades existentes y separa los faltantes. No implementes una funcionalidad solo porque figura como posibilidad en la propuesta.
+
+## Comparar cámara e imagen/video
+
+Cuando se solicite recuperar un comportamiento de cámara, compara la misma fuente y el mismo fotograma, proyección, giro, inclinación, encuadre, posición, foco y apertura. Conserva proporción, recorte y centro del plano; un recorte convertido en una imagen nueva cambia la geometría. Separa equivalencia técnica de aprobación visual: una comparación del renderer consigo mismo no prueba que se haya recuperado la referencia estética. Mantén el original para comparar y explicita cualquier reencuadre.
 
 ## Revisión y entrega
 
