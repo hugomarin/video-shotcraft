@@ -1,3 +1,5 @@
+import {filmPlaneCard, filmCaptionCard, filmFadeCard} from './product/film';
+import { productSceneCard } from './product/product-scene';
 import type { CardDef } from "./types";
 import { textBasicCard } from "./text-basic";
 import { titleCardCard } from "./inkpress/title-card";
@@ -18,6 +20,8 @@ import { buildCardRegistry } from "./buildRegistry";
  *  - 动效库：demos/ 150 个 demo 组件（gen-index 静态索引）
  *  - 旧工程兼容卡：只进入 CARDS，不进入素材库 / Studio 使用的 CARD_LIST */
 const ALL: CardDef[] = [
+  productSceneCard,
+  filmPlaneCard, filmCaptionCard, filmFadeCard,
   textBasicCard,
   titleCardCard,
   captionStripCard,

@@ -32,6 +32,8 @@ export interface TrackData {
 }
 
 export interface ProjectData {
+  /** Versioned, lossless planar-film coordinates. No conversion to optical camera units. */
+  productFilm?: {version:1; projection:"css-parallel"; coordinateSpace:"composition-pixels"};
   /** Visual preset; absent means the manifest's default, preserving older JSON. */
   themeId?: string;
   themeColors?: Record<string, string>;

@@ -1,0 +1,317 @@
+{
+  "renderExact": true,
+  "project": {
+    "name": "Orbit \u00b7 Optical comparisons",
+    "fps": 30,
+    "width": 960,
+    "height": 600,
+    "tracks": [
+      {
+        "id": "product-track",
+        "name": "Product",
+        "clips": [
+          {
+            "id": "optics-0",
+            "cardId": "product-optical-scene",
+            "start": 0,
+            "duration": 60,
+            "inOffset": 0,
+            "speed": 1,
+            "opacity": 1,
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "props": {
+              "motion": {
+                "version": 1,
+                "startFrame": 0,
+                "endFrame": 59,
+                "start": {
+                  "yaw": 25,
+                  "pitch": -28,
+                  "zoom": 1.25,
+                  "panX": -0.15,
+                  "panY": 0,
+                  "u": 0.65,
+                  "v": 0.35,
+                  "aperture": 0.12
+                },
+                "end": {
+                  "yaw": 15,
+                  "pitch": -20,
+                  "zoom": 1.25,
+                  "panX": 0.15,
+                  "panY": 0.1,
+                  "u": 0.4,
+                  "v": 0.65,
+                  "aperture": 0.12
+                }
+              },
+              "src": "product-demo/dashboard.svg",
+              "projection": "perspective",
+              "cameraDistance": 14.4,
+              "focusQuality": "96",
+              "backgroundColor": "#d3d7dd",
+              "fadeColor": "#d3d7dd",
+              "fade": 0,
+              "vignette": 10,
+              "grain": 0,
+              "shine": 10
+            },
+            "label": "Light \u00b7 perspective \u00b7 14.4"
+          },
+          {
+            "id": "optics-1",
+            "cardId": "product-optical-scene",
+            "start": 60,
+            "duration": 60,
+            "inOffset": 0,
+            "speed": 1,
+            "opacity": 1,
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "props": {
+              "motion": {
+                "version": 1,
+                "startFrame": 0,
+                "endFrame": 59,
+                "start": {
+                  "yaw": 25,
+                  "pitch": -28,
+                  "zoom": 1.25,
+                  "panX": -0.15,
+                  "panY": 0,
+                  "u": 0.65,
+                  "v": 0.35,
+                  "aperture": 0.12
+                },
+                "end": {
+                  "yaw": 15,
+                  "pitch": -20,
+                  "zoom": 1.25,
+                  "panX": 0.15,
+                  "panY": 0.1,
+                  "u": 0.4,
+                  "v": 0.65,
+                  "aperture": 0.12
+                }
+              },
+              "src": "product-demo/dashboard.svg",
+              "projection": "perspective",
+              "cameraDistance": 36,
+              "focusQuality": "96",
+              "backgroundColor": "#d3d7dd",
+              "fadeColor": "#d3d7dd",
+              "fade": 0,
+              "vignette": 10,
+              "grain": 0,
+              "shine": 10
+            },
+            "label": "Light \u00b7 perspective \u00b7 36"
+          },
+          {
+            "id": "optics-2",
+            "cardId": "product-optical-scene",
+            "start": 120,
+            "duration": 60,
+            "inOffset": 0,
+            "speed": 1,
+            "opacity": 1,
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "props": {
+              "motion": {
+                "version": 1,
+                "startFrame": 0,
+                "endFrame": 59,
+                "start": {
+                  "yaw": 25,
+                  "pitch": -28,
+                  "zoom": 1.25,
+                  "panX": -0.15,
+                  "panY": 0,
+                  "u": 0.65,
+                  "v": 0.35,
+                  "aperture": 0.12
+                },
+                "end": {
+                  "yaw": 15,
+                  "pitch": -20,
+                  "zoom": 1.25,
+                  "panX": 0.15,
+                  "panY": 0.1,
+                  "u": 0.4,
+                  "v": 0.65,
+                  "aperture": 0.12
+                }
+              },
+              "src": "product-demo/dashboard.svg",
+              "projection": "orthographic",
+              "cameraDistance": 36,
+              "focusQuality": "96",
+              "backgroundColor": "#d3d7dd",
+              "fadeColor": "#d3d7dd",
+              "fade": 0,
+              "vignette": 10,
+              "grain": 0,
+              "shine": 10
+            },
+            "label": "Light \u00b7 orthographic \u00b7 36"
+          },
+          {
+            "id": "optics-3",
+            "cardId": "product-optical-scene",
+            "start": 180,
+            "duration": 60,
+            "inOffset": 0,
+            "speed": 1,
+            "opacity": 1,
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "props": {
+              "motion": {
+                "version": 1,
+                "startFrame": 0,
+                "endFrame": 59,
+                "start": {
+                  "yaw": 25,
+                  "pitch": -28,
+                  "zoom": 1.25,
+                  "panX": -0.15,
+                  "panY": 0,
+                  "u": 0.65,
+                  "v": 0.35,
+                  "aperture": 0.12
+                },
+                "end": {
+                  "yaw": 15,
+                  "pitch": -20,
+                  "zoom": 1.25,
+                  "panX": 0.15,
+                  "panY": 0.1,
+                  "u": 0.4,
+                  "v": 0.65,
+                  "aperture": 0.12
+                }
+              },
+              "src": "product-demo/dashboard-dark.svg",
+              "projection": "perspective",
+              "cameraDistance": 14.4,
+              "focusQuality": "96",
+              "backgroundColor": "#10141b",
+              "fadeColor": "#10141b",
+              "fade": 0,
+              "vignette": 10,
+              "grain": 0,
+              "shine": 10
+            },
+            "label": "Dark \u00b7 perspective \u00b7 14.4"
+          },
+          {
+            "id": "optics-4",
+            "cardId": "product-optical-scene",
+            "start": 240,
+            "duration": 60,
+            "inOffset": 0,
+            "speed": 1,
+            "opacity": 1,
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "props": {
+              "motion": {
+                "version": 1,
+                "startFrame": 0,
+                "endFrame": 59,
+                "start": {
+                  "yaw": 25,
+                  "pitch": -28,
+                  "zoom": 1.25,
+                  "panX": -0.15,
+                  "panY": 0,
+                  "u": 0.65,
+                  "v": 0.35,
+                  "aperture": 0.12
+                },
+                "end": {
+                  "yaw": 15,
+                  "pitch": -20,
+                  "zoom": 1.25,
+                  "panX": 0.15,
+                  "panY": 0.1,
+                  "u": 0.4,
+                  "v": 0.65,
+                  "aperture": 0.12
+                }
+              },
+              "src": "product-demo/dashboard-dark.svg",
+              "projection": "perspective",
+              "cameraDistance": 36,
+              "focusQuality": "96",
+              "backgroundColor": "#10141b",
+              "fadeColor": "#10141b",
+              "fade": 0,
+              "vignette": 10,
+              "grain": 0,
+              "shine": 10
+            },
+            "label": "Dark \u00b7 perspective \u00b7 36"
+          },
+          {
+            "id": "optics-5",
+            "cardId": "product-optical-scene",
+            "start": 300,
+            "duration": 60,
+            "inOffset": 0,
+            "speed": 1,
+            "opacity": 1,
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "props": {
+              "motion": {
+                "version": 1,
+                "startFrame": 0,
+                "endFrame": 59,
+                "start": {
+                  "yaw": 25,
+                  "pitch": -28,
+                  "zoom": 1.25,
+                  "panX": -0.15,
+                  "panY": 0,
+                  "u": 0.65,
+                  "v": 0.35,
+                  "aperture": 0.12
+                },
+                "end": {
+                  "yaw": 15,
+                  "pitch": -20,
+                  "zoom": 1.25,
+                  "panX": 0.15,
+                  "panY": 0.1,
+                  "u": 0.4,
+                  "v": 0.65,
+                  "aperture": 0.12
+                }
+              },
+              "src": "product-demo/dashboard-dark.svg",
+              "projection": "orthographic",
+              "cameraDistance": 36,
+              "focusQuality": "96",
+              "backgroundColor": "#10141b",
+              "fadeColor": "#10141b",
+              "fade": 0,
+              "vignette": 10,
+              "grain": 0,
+              "shine": 10
+            },
+            "label": "Dark \u00b7 orthographic \u00b7 36"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,8 +1,10 @@
+import {FILM_CONTRACT} from './cards/product/film-contract.mjs';
+import { productProject } from './productProject';
 import { create } from "zustand";
 import type { ClipData, ProjectData, TrackData } from "./types";
 import { uid } from "./types";
 import { CARDS } from "./cards/registry";
-import { clipDefaultsFor } from "./cards/types";
+import { clipDefaultsFor, defaultsOf } from "./cards/types";
 import { demoProject } from "./demoProject";
 import { MANIFEST } from "./cards/projectCards";
 import { manifestKey } from "./cards/manifest";
@@ -12,7 +14,8 @@ import { t } from "./i18n";
 
 export { projectDuration } from "./types";
 
-const STORAGE_KEY = "shotcraft-workbench-project-v1";
+const productMode=new URLSearchParams(window.location.search).has("product");
+const STORAGE_KEY = productMode?"shotcraft-product-project-v1":"shotcraft-workbench-project-v1";
 
 const loadSaved = (): ProjectData | null => {
   try {
@@ -41,7 +44,7 @@ const loadInitial = (): { project: ProjectData; past: ProjectData[]; imported: b
     if (saved?.source !== manifestKey(MANIFEST))
       return { project: buildProjectFromManifest(MANIFEST), past: saved ? [saved] : [], imported: true };
   }
-  return { project: saved ?? demoProject(), past: [], imported: false };
+  return { project: saved ?? (productMode?productProject():demoProject()), past: [], imported: false };
 };
 const initial = loadInitial();
 
@@ -119,7 +122,7 @@ const mutateProject = (
 
 export const useStore = create<WorkbenchState>((set, get) => ({
   project: initial.project,
-  selectedClipId: null,
+  selectedClipId: productMode ? initial.project.tracks.flatMap(t=>t.clips)[0]?.id ?? null : null,
   playhead: 0,
   playing: false,
   pxPerFrame: 2,
@@ -225,6 +228,7 @@ export const useStore = create<WorkbenchState>((set, get) => ({
         // 反向变速，播放速度不变；媒体卡（realtime）只换算时长、不变速。
         // 拖拽负载里的 duration（素材库给视频 / 音频的默认长度）与 durationInFrames 同口径，一并换算
         const { duration, speed } = clipDefaultsFor(card, d.fps, extra?.duration);
+        if(cardId.startsWith("product-film-"))d.productFilm={...FILM_CONTRACT};
         track.clips.push({
           id: newId,
           cardId,
@@ -236,7 +240,7 @@ export const useStore = create<WorkbenchState>((set, get) => ({
           scale: 1,
           x: 0,
           y: 0,
-          props: extra?.props ?? {},
+          props: cardId.startsWith("product-film-") ? {...defaultsOf(card),...extra?.props} : extra?.props ?? {},
           label: extra?.label,
         });
       }),

@@ -26,3 +26,11 @@ public/*
 
 # scripts/check-demo.mjs 单卡自检的临时入口
 .check/
+
+# Public synthetic fixture; private product/ media remain ignored.
+!public/product-demo/
+public/product-demo/*
+!public/product-demo/dashboard.svg
+
+!public/product-demo/dashboard-dark.svg
+!public/product-demo/page.html

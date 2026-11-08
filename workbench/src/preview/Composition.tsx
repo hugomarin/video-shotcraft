@@ -1,5 +1,7 @@
 import React from "react";
-import { AbsoluteFill, Freeze, Sequence, useCurrentFrame } from "remotion";
+import {validateMedia} from '../cards/product/media.mjs';
+import type {PosePreview} from "../productPreview";
+import { AbsoluteFill, Audio, staticFile, Freeze, Sequence, useCurrentFrame } from "remotion";
 import type { ProjectData } from "../types";
 import { CARDS } from "../cards/registry";
 import { MANIFEST } from '../cards/projectCards';
@@ -18,7 +20,7 @@ const TimeRemap: React.FC<{
   return <Freeze frame={Math.max(0, inOffset + frame * speed)}>{children}</Freeze>;
 };
 
-export const MainComposition: React.FC<{ project: ProjectData }> = ({ project }) => {
+export const MainComposition: React.FC<{ project: ProjectData; posePreview?:PosePreview }> = ({ project, posePreview }) => {
   // UI 中 tracks[0] 是最上层轨 → 最后渲染（覆盖在上）
   const ordered = [...project.tracks].reverse();
   return (
@@ -35,6 +37,7 @@ export const MainComposition: React.FC<{ project: ProjectData }> = ({ project })
             // 成片组件按 `duration`/`dur` 算出场淡出：注入 clip 的源时长，拉长/裁短后淡出跟着挪
             if (card.durationProp)
               props[card.durationProp] = Math.max(1, Math.round(clip.inOffset + duration * clip.speed));
+            if (posePreview?.clipId === clip.id && clip.cardId === 'product-optical-scene') props.__editorPose = posePreview.pose;
             // 音频卡：裁入/变速交给卡内 <Audio trimBefore playbackRate>，
             // 不能包 Freeze（会掐死原生播放），也无需图层包裹
             if (card.kind === "audio") {
@@ -44,15 +47,20 @@ export const MainComposition: React.FC<{ project: ProjectData }> = ({ project })
                 </Sequence>
               );
             }
+            const media=clip.cardId==='product-optical-scene' && props.media ? validateMedia(props.media) : null;
             return (
               <Sequence key={clip.id} from={clip.start} durationInFrames={duration}>
+                {media?.audio && props.audioEnabled === true && <Audio src={staticFile(media.audio)} trimBefore={Math.round(((media.trimStart??0)/media.fps+clip.inOffset/30)*project.fps)} playbackRate={clip.speed*project.fps/30} />}
                 <AbsoluteFill
                   style={{
                     opacity: clip.opacity,
                     transform: `translate(${clip.x}px, ${clip.y}px) scale(${clip.scale})`,
                   }}
                 >
-                  {card.kind === "video" ? (
+                  {clip.cardId === "product-optical-scene" ? (
+                    // Freeze clamps to the composition duration; trimmed source time can exceed it.
+                    <Comp {...props} __sourceOffset={clip.inOffset} __sourceSpeed={clip.speed} />
+                  ) : card.kind === "video" ? (
                     // 视频卡：同音频卡走原生播放通道，保留图层包裹
                     <Comp {...props} inOffset={clip.inOffset} speed={clip.speed} />
                   ) : (

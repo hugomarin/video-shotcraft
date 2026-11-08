@@ -8,7 +8,7 @@ Convertir imágenes, grabaciones de aplicaciones y páginas web en videos de pro
 2. `PRODUCT-STUDIO.md`: mapa de la integración local.
 3. El README y las instrucciones más específicas del área que se vaya a modificar.
 
-Este primer commit aporta documentación. La integración experimental descrita en el handoff todavía vive en la copia local de Hugo y no forma parte de este commit. Comprobar archivos y git status antes de asumir que está disponible. No sobrescribir cambios locales.
+La integración experimental de imagen y la muestra sintética Orbit están incluidas en el repositorio. Ver el handoff para distinguirlas de funciones futuras. Comprobar git status antes de editar y no sobrescribir cambios locales.
 
 ## Reglas de producto
 - La referencia estética es la presentación de producto de Linear: jerarquía clara, movimiento pausado, perspectiva contenida, foco selectivo, luz y sombras suaves. No afirmar que conocemos su implementación interna.
@@ -47,3 +47,8 @@ Para cambios visuales: revisar inicio/mitad/final, imagen clara y oscura, preset
 - El fork es público. Usar fixtures sintéticos. No publicar capturas de clientes, grabaciones privadas, credenciales ni archivos locales de proyecto.
 - Revisar el diff staged antes de publicar. No usar git add . sobre una carpeta con medios de trabajo.
 - Actualizar el handoff cuando cambie el estado de una funcionalidad.
+
+## Dirección de arte antes de producción
+- Para ordenar un brief o referencias de video de producto, leer `.agents/skills/product-film-direction/SKILL.md` y su plantilla. Entregar historia y guion antes de producir; si el usuario aportará la propuesta gráfica, solicitarla con un brief concreto y no dar por aprobada una estética propia.
+- Para implementar motion graphics, usar `.agents/skills/remotion-best-practices/SKILL.md`. Si falta, instalar con `python3 scripts/install-project-skills.py` cuando esté autorizada la preparación del entorno. `skills.lock.json` fija el origen y revisión; el contenido externo queda local e ignorado por Git. Esto no actualiza el motor Remotion del proyecto.
+- El flujo de propuesta, referencia y evaluación independiente se describe en `docs/PRODUCT-DIRECTION-WORKFLOW.md`. Lanzar un worker solo cuando el usuario lo solicite; el evaluador conserva los criterios y no entrega al worker la respuesta esperada.

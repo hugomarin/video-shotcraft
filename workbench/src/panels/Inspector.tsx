@@ -1,3 +1,6 @@
+import {ProductMedia} from "./ProductMedia";
+import {ProductRecipes} from "./ProductRecipes";
+import {ProductDirection} from "./ProductDirection";
 import React, { useRef } from "react";
 import type { PropField } from "../cards/types";
 import { cardFps, inOffsetFps, sourceLength } from "../cards/types";
@@ -58,6 +61,8 @@ const PropControl: React.FC<{
             max={field.max}
             step={field.step}
             onPointerDown={onBegin}
+            onKeyDown={onBegin}
+            aria-label={field.label}
             onChange={(e) => onChange(Number(e.target.value))}
           />
           <span className="slider-val">
@@ -155,6 +160,7 @@ export const Inspector: React.FC = () => {
 
   const { track, clip } = hit;
   const card = CARDS[clip.cardId];
+  const productControls = card?.id === "product-film-plane-v1" || card?.id === "product-optical-scene";
   const fps = project.fps;
   // 卡片编排帧率 ≠ 工程帧率（只有逐帧编排的卡需要提示；媒体卡按墙钟走无此问题）
   const srcFps = card ? cardFps(card) : fps;
@@ -178,21 +184,38 @@ export const Inspector: React.FC = () => {
       </div>
 
       <div className="inspector-scroll">
-        {card && card.schema.length > 0 && (
-          <section>
-            <div className="sec-title">{t("insp.contentStyle")}</div>
-            {card.schema.map((field) => (
-              <Row key={field.key} label={tx(field.label)}>
-                <PropControl
-                  field={field}
-                  value={themedProps(MANIFEST, card, project.themeId, clip.props, project.themeColors)[field.key] ?? field.default}
-                  onChange={(v) => updateClipProps(clip.id, { [field.key]: v })}
-                  onBegin={begin}
-                />
-              </Row>
+        {card?.id === "product-optical-scene" && <ProductMedia key={`media:${clip.id}`} clip={clip} />}
+        {card?.id === "product-optical-scene" && <ProductRecipes key={`recipes:${clip.id}`} clip={clip} />}
+        {card?.id === "product-optical-scene" && <ProductDirection key={clip.id} clip={clip} props={themedProps(MANIFEST,card,project.themeId,clip.props,project.themeColors)} />}
+        {card && card.schema.length > 0 && (() => {
+          const values = themedProps(MANIFEST, card, project.themeId, clip.props, project.themeColors);
+          const renderField = (field: PropField) => (
+            <React.Fragment key={field.key}><Row label={tx(field.label)}>
+              <PropControl field={field} value={values[field.key] ?? field.default}
+                onChange={(v) => updateClipProps(clip.id, { [field.key]: v })} onBegin={begin} />
+            </Row>
+            {productControls && field.key === "fadeColor" && <button className="btn" onClick={() => {commit(); updateClipProps(clip.id, {fadeColor: values.backgroundColor ?? "#ffffff"});}}>Igualar al fondo</button>}
+            </React.Fragment>
+          );
+          if (!card.inspectorGroups) return (
+            <section><div className="sec-title">{t("insp.contentStyle")}</div>
+              {card.schema.map(renderField)}</section>
+          );
+          const assigned = new Set(card.inspectorGroups.flatMap((group) => group.fields));
+          const remaining = card.schema.filter((field) => !assigned.has(field.key));
+          return <>
+            {card.inspectorGroups.filter(group => card.id !== "product-optical-scene" || !["start","end","position","focus"].includes(group.id)).map((group) => (
+              <details className="prop-group" key={`${card.id}:${group.id}`} open={group.open}>
+                <summary className="sec-title">{tx(group.label)}</summary>
+                <div className="prop-group-body">
+                  {group.fields.map((key) => card.schema.find((field) => field.key === key))
+                    .filter((field): field is PropField => !!field).map(renderField)}
+                </div>
+              </details>
             ))}
-          </section>
-        )}
+            {remaining.length > 0 && <section><div className="sec-title">{t("insp.contentStyle")}</div>{remaining.map(renderField)}</section>}
+          </>;
+        })()}
 
         <section>
           <div className="sec-title">{t("insp.timing")}</div>

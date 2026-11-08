@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "skills": [
+    {
+      "name": "remotion-best-practices",
+      "repository": "https://github.com/remotion-dev/skills",
+      "revision": "a2824c67f8b4585c294a8101db9f9f0ad3c643f8",
+      "path": "skills/remotion-best-practices",
+      "destination": ".agents/skills/remotion-best-practices"
+    }
+  ]
+}

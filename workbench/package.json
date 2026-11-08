@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "test:product": "node --test scripts/test-product-motion.mjs scripts/test-product-optics.mjs scripts/test-product-recipes.mjs scripts/test-product-contract.mjs scripts/test-product-media.mjs scripts/test-product-capture.mjs scripts/test-product-film.mjs",
     "test:platform": "node --test scripts/test-platform.mjs",
     "test:themes": "node scripts/test-themes.mjs",
     "test:legacy": "node scripts/gen-index.mjs && node scripts/test-legacy.mjs",
@@ -17,7 +18,11 @@
     "prestudio": "node scripts/gen-index.mjs",
     "studio": "remotion studio src/remotion/index.ts",
     "open": "node scripts/open.mjs",
-    "parity": "node scripts/parity.mjs"
+    "parity": "node scripts/parity.mjs",
+    "dev:product": "vite --host 127.0.0.1 --port 5198 --open /?product=1",
+    "predev:product": "node scripts/gen-index.mjs",
+    "render:product": "node scripts/gen-index.mjs && remotion render src/remotion/index.ts Main exports/product-demo.mp4 --props=examples/product-scene.json --codec=h264",
+    "test:product-render": "node scripts/test-product-render.mjs"
   },
   "dependencies": {
     "@react-three/fiber": "9.6.1",
