@@ -14,11 +14,21 @@ export const planeSchema = [
  number('travelY','Recorrido vertical',-12),number('edgeSoftness','Suavidad del recorte',5,0,100),
  {type:'boolean',key:'effectsEnabled',label:'Activar acabados',default:true},
  slider('aperture','Desenfoque',0,0,32,.5),slider('focusU','Foco horizontal ↔',.5,0,1,.01),slider('focusV','Foco vertical ↕',.5,0,1,.01),slider('focusWidth','Zona nítida',.2,.02,.8,.01),
- slider('exposure','Exposición',100,50,150,1),slider('light','Luz de fondo',0,0,100,1),slider('lightX','Posición de luz',65,0,100,1),
- slider('shadow','Sombra',0,0,100,1),slider('shine','Reflejo',0,0,100,1),slider('grain','Grano',0,0,100,1),slider('rounding','Esquinas',0,0,80,1),
+ slider('exposure','Luminosidad de imagen',100,50,150,1),slider('light','Luz de fondo',0,0,100,1),slider('lightX','Posición de luz',65,0,100,1),
+ slider('shadow','Sombra',0,0,100,1),slider('shine','Brillo superficial',0,0,100,1),slider('grain','Grano',0,0,100,1),slider('rounding','Esquinas suaves',0,0,80,1),
+ {type:'select',key:'maskMode',label:'Tipo de máscara',default:'0',options:[{value:'0',label:'Sin máscara'},{value:'1',label:'Elíptica'},{value:'2',label:'Vertical'}]},
+ slider('maskSize','Extensión / inicio',65,0,100,1),slider('maskSoft','Suavidad de máscara',35,0,100,1),
  color('fadeColor','Color del fundido','#ffffff'),slider('fade','Fundido inferior',0,0,100,1),slider('vignette','Viñeta',0,0,100,1),
  number('fadeFrames','Fundido · frames',15,0,300,1),color('backgroundColor','Fondo','#ffffff'),
 ];
+
+// Display units do not reinterpret the saved values or the renderer's geometry.
+for (const field of planeSchema) {
+ if (['pitch','yaw','roll'].includes(field.key)) field.unit='°';
+ else if (['scaleStart','scaleEnd'].includes(field.key)) field.unit='×';
+ else if (['exposure','light','lightX','shadow','shine','grain','fade','vignette','maskSize','maskSoft'].includes(field.key)) field.unit='%';
+ else if (field.type==='number'||['aperture','rounding'].includes(field.key)) field.unit=field.key==='fadeFrames'?' fr':' px';
+}
 
 export const captionSchema=[
  {type:'textarea',key:'content',label:'Texto',default:'Cada dato revela\nuna nueva oportunidad.'},
