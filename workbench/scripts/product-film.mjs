@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import {referencedAssets} from './pack-project.mjs';
 import {fileURLToPath} from 'node:url';import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
 import {FILM_CONTRACT,filmSchemas,snapshotFilm} from '../src/cards/product/film-contract.mjs';
 const [command,input,output]=process.argv.slice(2);
@@ -12,9 +13,10 @@ try{
   if(command==='snapshot'){if(!output)throw new Error('Output required');fs.writeFileSync(output,JSON.stringify(project,null,2),{flag:'wx'});}
   if(command==='pack'){
    if(!output)throw new Error('Output directory required');if(fs.existsSync(output))throw new Error('Output exists');
-   if(project.tracks.some(t=>t.clips.some(c=>!filmSchemas[c.cardId] && c.cardId!=='audio-clip')))throw new Error('Pack supports film-v1 cards and audio-clip only; no assets will be silently omitted');
+   if(project.tracks.some(t=>t.clips.some(c=>!filmSchemas[c.cardId] && c.cardId!=='audio-clip' && c.cardId!=='product-optical-scene')))throw new Error('Pack supports film-v1, optical scenes and audio-clip only; no assets will be silently omitted');
    const base=fileURLToPath(new URL('../public/',import.meta.url));
-   const files=[...new Set(project.tracks.flatMap(t=>t.clips.flatMap(c=>c.props.file?[c.props.file]:[])))];
+   const optical={tracks:project.tracks.map(t=>({...t,clips:t.clips.filter(c=>c.cardId==='product-optical-scene')}))};
+   const files=[...new Set([...referencedAssets(optical),...project.tracks.flatMap(t=>t.clips.flatMap(c=>c.props.file?[c.props.file]:[]))])];
    const assets=files.map(file=>{if(typeof file!=='string'||/^(?:[a-z]+:|\/|\\)/i.test(file)||file.split(/[\\/]/).includes('..'))throw new Error('Asset must be public-relative');const src=path.join(base,file);const bytes=fs.readFileSync(src);return {file,bytes,sha256:createHash('sha256').update(bytes).digest('hex')};});
    fs.mkdirSync(output,{recursive:true});
    try{for(const {file,bytes}of assets){const dest=path.join(output,'public',file);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,bytes);}

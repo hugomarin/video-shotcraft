@@ -69,3 +69,28 @@ test('prototype orientation matches the Y-up prototype basis after CSS axis conv
  const p=snapshotFilm(fixture());assert.equal(p.tracks[2].clips[0].props.cameraModel,'legacy');
  p.tracks[2].clips[0].props.cameraModel='prototype';assert.deepEqual(snapshotFilm(JSON.parse(JSON.stringify(p))),p);
 });
+
+test('optical integration preserves editorial tracks, source timing and original project',async()=>{
+ const {opticalFilm}=await import('../src/cards/product/optical-film.mjs');
+ const p=fixture(),before=structuredClone(p),shots={};
+ for(const t of p.tracks)for(const c of t.clips)if(c.cardId==='product-film-plane-v1'){
+  const pose={yaw:24,pitch:-32.5,zoom:1.6,panX:0,panY:0,u:.59,v:.45,aperture:.06};
+  shots[c.id]={material:{src:'product-demo/dashboard.svg',mediaAspect:1.6},motion:{version:1,startFrame:0,endFrame:c.duration-1,start:pose,end:pose}};
+ }
+ const result=opticalFilm(p,shots);assert.deepEqual(p,before);
+ for(let t=0;t<p.tracks.length;t++)for(let i=0;i<p.tracks[t].clips.length;i++){
+  const a=p.tracks[t].clips[i],b=result.tracks[t].clips[i];
+  if(a.cardId!=='product-film-plane-v1')assert.deepEqual(a,b);
+  else{for(const k of ['start','duration','speed','inOffset','opacity','scale','x','y'])assert.equal(a[k],b[k]);assert.equal(b.cardId,'product-optical-scene');assert.deepEqual(b.props.motion,shots[a.id].motion);}
+ }
+ assert.throws(()=>opticalFilm(p,{}));
+});
+
+test('mixed optical films validate lens controls and package their material',async()=>{
+ const {readFileSync,mkdtempSync,rmSync}=await import('node:fs');const {tmpdir}=await import('node:os');const {join}=await import('node:path');const {spawnSync}=await import('node:child_process');
+ const input=new URL('../examples/product-film-optical.json',import.meta.url).pathname;
+ const p=JSON.parse(readFileSync(input));assert.equal(validateFilm(p).ok,true);
+ p.tracks.flatMap(t=>t.clips).find(c=>c.cardId==='product-optical-scene').props.cameraDistance=0;assert.equal(validateFilm(p).ok,false);
+ const dir=mkdtempSync(join(tmpdir(),'optical-film-'));
+ try{const result=spawnSync(process.execPath,[new URL('./product-film.mjs',import.meta.url).pathname,'pack',input,join(dir,'pack')],{encoding:'utf8'});assert.equal(result.status,0,result.stderr);assert.ok(readFileSync(join(dir,'pack/public/product-demo/dashboard.svg')).length>0);}finally{rmSync(dir,{recursive:true,force:true});}
+});

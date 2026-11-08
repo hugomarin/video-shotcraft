@@ -1,3 +1,4 @@
+import {validateProject} from './project-contract.mjs';
 import {planeSchema,captionSchema,fadeSchema} from './film-schema.mjs';
 export const FILM_CONTRACT={version:1,projection:'css-parallel',coordinateSpace:'composition-pixels'};
 export const filmSchemas={'product-film-plane-v1':planeSchema,'product-film-caption-v1':captionSchema,'product-film-fade-v1':fadeSchema};
@@ -28,6 +29,8 @@ export function validateFilm(project){
    if(!(v.clearAt<=v.softAt&&v.softAt<=v.strongAt&&v.strongAt<=v.solidAt))errors.push(`${c.id}: gradient stops must be ordered`);
   }
  }
+ const optical={...project,tracks:project.tracks.map(t=>({...t,clips:t.clips.filter(c=>c.cardId==='product-optical-scene')}))};
+ if(optical.tracks.some(t=>t.clips.length))errors.push(...validateProject(optical).errors);
  return {ok:errors.length===0,errors};
 }
 export function snapshotFilm(project){

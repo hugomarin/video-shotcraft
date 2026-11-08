@@ -31,11 +31,13 @@ export const ProductScene:React.FC<Record<string,unknown>>=(props)=>{
   return()=>{disposed=true;};
  },[settings.src]);
  useLayoutEffect(()=>{engine.current?.update(settings,state)});
- return <AbsoluteFill><canvas ref={canvas} style={{width:'100%',height:'100%'}} aria-label="Escena de producto con cámara y enfoque selectivo"/></AbsoluteFill>;
+ const fade=Math.min(Number(p.clipFadeFrames),Math.max(0,(count-1)/2));
+ const opacity=fade>0?Math.max(0,Math.min(1,frame/fade,(count-1-frame)/fade)):1;
+ return <AbsoluteFill style={{opacity}}><canvas ref={canvas} style={{width:'100%',height:'100%'}} aria-label="Escena de producto con cámara y enfoque selectivo"/></AbsoluteFill>;
 };
 export const productSceneCard:CardDef={id:'product-optical-scene',name:'Escena de producto · Cámara y enfoque',nameEn:'Product scene · Camera & focus',category:'Producto',durationInFrames:180,durationProp:'duration',width:1920,height:1200,component:ProductScene,schema,inspectorGroups:[
  {id:'optics',label:'Óptica',fields:['projection','cameraDistance','focusQuality'],open:true},
- {id:'media',label:'Imagen',fields:['src','mediaAspect','audioEnabled'],open:true},
+ {id:'media',label:'Imagen',fields:['src','mediaAspect','audioEnabled','clipFadeFrames'],open:true},
  {id:'start',label:'Cámara · inicio',fields:['yawStart','pitchStart','zoomStart'],open:true},
  {id:'end',label:'Cámara · final',fields:['yawEnd','pitchEnd','zoomEnd']},
  {id:'position',label:'Posición',fields:['panX','panY']},

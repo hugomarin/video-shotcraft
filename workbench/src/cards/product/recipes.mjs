@@ -11,7 +11,7 @@ export function applyRecipe(props, id, clip) {
  const custom=props.recipeState?.custom ?? props;
  const r=clipMotionRange(clip);
  // Replace the complete effect snapshot. Only the material is carried across.
- return clone({...defaults,...recipe.props,src:props.src??defaults.src,mediaAspect:props.mediaAspect??defaults.mediaAspect,...(props.media?{media:props.media}:{}),audioEnabled:props.audioEnabled??false,
+ return clone({...defaults,...recipe.props,src:props.src??defaults.src,mediaAspect:props.mediaAspect??defaults.mediaAspect,...(props.media?{media:props.media}:{}),audioEnabled:props.audioEnabled??false,clipFadeFrames:props.clipFadeFrames??0,
    motion:{version:1,startFrame:r.start,endFrame:r.end,start:recipe.start,end:recipe.end},
    recipeState:{version:1,id:recipe.id,recipeVersion:recipe.version,custom}});
 }
