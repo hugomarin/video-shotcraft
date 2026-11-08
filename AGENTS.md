@@ -11,6 +11,7 @@ Convertir imágenes, grabaciones de aplicaciones y páginas web en videos de pro
 La integración experimental de imagen y la muestra sintética Orbit están incluidas en el repositorio. Ver el handoff para distinguirlas de funciones futuras. Comprobar git status antes de editar y no sobrescribir cambios locales.
 
 ## Reglas de producto
+- Base aprobada para los próximos videos: cámara nativa `product-optical-scene`, controles de Dirigir toma y JSON editable. Partir de `workbench/examples/product-film-optical.json`. Conservar originales paralelos; no reinterpretar sus unidades como ópticas.
 - La referencia estética es la presentación de producto de Linear: jerarquía clara, movimiento pausado, perspectiva contenida, foco selectivo, luz y sombras suaves. No afirmar que conocemos su implementación interna.
 - No resolver la perspectiva excesiva solamente reduciendo rangos de sliders. Separar orientación, encuadre, distancia y óptica; comparar frames de inicio, mitad y final.
 - Fondo y fundido tienen colores independientes; soportar acabados claros y oscuros.
