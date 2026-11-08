@@ -167,3 +167,9 @@ Se incorporó un contrato `productFilm` v1 sobre ProjectData y tres cards nativa
 Comprobación privada: 15 PNG comparados sin diferencias; MP4 completo de 960 frames con audio decodificado idéntico al original; edición 12→12.5°, undo/redo y recarga comprobados. No es un importador universal de código Remotion ni una equivalencia entre unidades CSS y óptica Three.js. Inclinación/giro son constantes por toma; escala y desplazamiento vertical sí interpolan. Los medios privados y los resultados de comparación permanecen ignorados por Git.
 
 Método de autoría actualizado: la skill de dirección (proyecto y copia personal) exige crear bocetos renderizados y videos desde el mismo JSON nativo, con preview/render compartidos y edición verificable en Shotcraft. No se permite usar una composición independiente como etapa previa a un traslado posterior. Los efectos no soportados se declaran pendientes o se integran primero en cards nativas dentro del alcance autorizado.
+
+
+### Enfoque y acabados en plano paralelo — 2026-11-08
+La misma card `product-film-plane-v1` incorpora zona nítida, foco horizontal/vertical y desenfoque sintético orientado por la profundidad del plano; exposición, luz, sombra, reflejo, grano, esquinas, fondo, fundido y viñeta. Los controles aparecen en grupos nativos del inspector y se guardan en el mismo JSON. Defaults neutros conservan los proyectos existentes y sus ajustes de cámara sin reimportar. La profundidad de campo es una aproximación por máscara y blur sobre el plano, no una lente física ni una migración del shader Three.js.
+
+Validación: build, 25 tests de producto y cinco de plataforma; 15 frames originales idénticos; MP4 de video recortado de 60 frames con audio; renders sintéticos claros/oscuros de seis segundos; undo/redo y recarga del desenfoque en sesión aislada. El degradado editorial sigue en su propia pista y puede cubrir el fondo inferior; no confundirlo con el fondo de la toma.

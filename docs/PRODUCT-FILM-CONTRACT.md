@@ -21,7 +21,7 @@ Tracks use Shotcraft's existing order: first track is visually uppermost. Keep c
 - Anchor is in composition pixels. Crop and source center are in source pixels **after** scaling the source to `sourceWidth`. The original image aspect ratio is preserved. Crop origin minus source center positions the crop relative to the anchor. Source display position inside the crop is minus crop origin.
 - Plane fade starts at frame 0 and ends at source duration minus one. Caption exit margins use source duration. These different formulas preserve the approved prototype exactly.
 - The gradient is independent of plane opacity. Background and gradient color are independent.
-- V1 parallel projection does not translate into the optical Three.js card's camera units. No camera-distance or simulated depth-of-field conversion is performed. Pitch/yaw/roll are constant per shot; scale and vertical travel animate. This does not add the optical card's “Fijar inicio/final” workflow to this renderer.
+- V1 parallel projection does not translate into the optical Three.js card's camera units. No camera-distance conversion is performed. Optional neutral-default finishes and synthetic planar depth-of-field are available directly on the native plane card. Pitch/yaw/roll are constant per shot; scale and vertical travel animate. This does not add the optical card's “Fijar inicio/final” workflow to this renderer.
 - V1 is not a general converter from arbitrary Remotion code, HTML or video. Unsupported contract versions/properties fail validation instead of being guessed. A new visual primitive needs an explicit supported card or a declared migration and visual comparison.
 
 ## Workflow for people and agents
@@ -49,3 +49,14 @@ The real footage and music remain in ignored local exports/imports. The approved
 The full native MP4 was rendered and decoded; decoded audio SHA-256 matched the original MP4. In the editor, pitch was changed from 12 to 12.5, undone to 12, redone to 12.5 and restored to 12; reload retained the project and restored pitch. The local Remotion preview now reads the same native JSON and MainComposition. Shared authoring no longer requires maintaining two render implementations.
 
 Validation also passed the production build, five platform tests and 23 product tests (including five new film-contract/package tests). Six-second synthetic light and dark MP4s were rendered and frames 0, 30, 90, 150 and 179 inspected. The build retains the existing bundle-size warning. No new preset implementation is introduced in this change.
+
+
+## Planar focus and appearance
+
+The plane card now exposes focus/appearance without converting or replacing existing geometry. `aperture` is an artistic blur strength in source-display pixels, not an f-stop. `focusU`/`focusV` locate the sharp point within the crop (0–1); `focusWidth` defines the sharp band. The depth direction comes from the Z row of the exact CSS Rx/Ry/Rz rotation. A masked backdrop blur blends away from that band; its strength depends on tilt and vanishes on a front-facing plane. This is a synthetic depth-of-field approximation on a single flat plane, not a physical lens, recovered semantic layers or the optical shader's sampling algorithm. It uses one synchronized media element and leaves editorial text untouched.
+
+Appearance: exposure, shadow, reflection, deterministic grain and corner radius. Background: independent color plus light amount/position. Finish: independent fade color, bottom fade and vignette. The separate editorial reading-gradient track remains independently editable; it may cover the background at the bottom of the composition. `effectsEnabled` bypasses focus and finishes while retaining the chosen background color. Defaults are neutral, so existing projects and user camera edits need no migration or reimport.
+
+Verification: build, 25 product tests, five platform tests; all 15 sampled legacy frames remain pixel-identical with neutral defaults. A real-video seek segment (frames 480–539) renders 60 video frames with audio. Light and dark synthetic six-second MP4s were inspected at start, middle and end. In an isolated editor session, blur changed 0→16.5, undo restored 0, redo and reload retained 16.5. No user project was replaced during this verification.
+
+With nonzero effects bypassed, frame 523 also matches the original exactly under the same CLI render configuration. Comparisons across different renderer configurations are not used as parity evidence.

@@ -22,3 +22,20 @@ test('CLI package carries synthetic media and refuses overwriting an existing de
   const run=()=>spawnSync(process.execPath,[script,'pack',input,out],{encoding:'utf8'});assert.equal(run().status,0);assert.deepEqual(JSON.parse(readFileSync(join(out,'project.json'))),snapshotFilm(fixture()));assert.equal(JSON.parse(readFileSync(join(out,'assets.json'))).length,1);assert.equal(run().status,1);assert.ok(readFileSync(join(out,'public/product-demo/dashboard.svg')).length>0);
  }finally{rmSync(dir,{recursive:true,force:true});}
 });
+
+test('focus follows CSS plane depth, disables on a frontal plane and is finite at extreme tilts',async()=>{
+ const {planeFocus}=await import('../src/cards/product/film-focus.mjs');
+ const base={pitch:0,yaw:0,roll:0,cropWidth:800,cropHeight:500,focusU:.5,focusV:.5,focusWidth:.2,aperture:10};
+ assert.equal(planeFocus(base).blur,0);
+ const pitched=planeFocus({...base,pitch:30});assert.ok(pitched.blur>0);assert.ok(pitched.mask.startsWith('linear-gradient(180deg'));
+ const turned=planeFocus({...base,pitch:30,roll:90});assert.ok(turned.mask.startsWith('linear-gradient(90.00000000000001deg')||turned.mask.startsWith('linear-gradient(90deg'));
+ const focused=planeFocus({...base,pitch:30,focusV:.8});assert.notEqual(focused.mask,pitched.mask);
+ for(const pitch of [-85,0,85])for(const yaw of [-85,0,85]){const f=planeFocus({...base,pitch,yaw,roll:179});assert.ok(Number.isFinite(f.blur));assert.ok(!f.mask.includes('NaN'));}
+});
+test('old film JSON gets neutral finishes and enabled effects persist without changing framing',()=>{
+ const p=fixture();const before=structuredClone(p.tracks[2].clips[0].props);const plain=snapshotFilm(p);const props=plain.tracks[2].clips[0].props;
+ assert.equal(props.aperture,0);assert.equal(props.exposure,100);assert.equal(props.shadow,0);assert.equal(props.fade,0);
+ Object.assign(props,{aperture:8,focusU:.3,focusV:.6,light:25,shadow:20,shine:10,grain:8,exposure:110,fadeColor:'#112233',backgroundColor:'#334455',effectsEnabled:false});
+ const restored=snapshotFilm(JSON.parse(JSON.stringify(plain)));assert.deepEqual(restored,plain);for(const k of ['pitch','yaw','roll','anchorX','centerX','cropX','scaleStart'])assert.equal(props[k],before[k]);
+ props.effectsEnabled='false';assert.equal(validateFilm(plain).ok,false);
+});
