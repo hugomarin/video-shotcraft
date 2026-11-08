@@ -1,3 +1,4 @@
+import {planeMask} from './film-mask.mjs';
 import {planeFocus} from './film-focus.mjs';
 import {planeSchema,captionSchema,fadeSchema} from './film-schema.mjs';
 import React from 'react';
@@ -23,15 +24,18 @@ export const FilmPlane:React.FC<Record<string,unknown>> = props => {
  const focus=planeFocus(Object.fromEntries(['pitch','yaw','roll','cropWidth','cropHeight','focusU','focusV','focusWidth','aperture'].map(k=>[k,Number(p[k])])) as Parameters<typeof planeFocus>[0]);
  const amount=(key:string)=>enabled?Number(p[key]):0;
  const texture='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="3" seed="7" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n)" opacity=".5"/></svg>');
+ const mask=planeMask(String(p.maskMode),Number(p.maskSize),Number(p.maskSoft),enabled);
  const soft=Math.min(Number(p.edgeSoftness),Number(p.cropWidth)/2);
  return <AbsoluteFill style={{background:String(p.backgroundColor),opacity}}>
   {amount('light')>0&&<AbsoluteFill style={{background:`radial-gradient(ellipse at ${p.lightX}% 10%,rgba(255,255,255,${amount('light')/100}),transparent 75%)`}}/>}
   <div style={{position:'absolute',left:Number(p.anchorX),top:Number(p.anchorY),filter:amount('shadow')?`drop-shadow(0 18px 24px rgba(0,0,0,${amount('shadow')*.006}))`:undefined,transformOrigin:'0 0',transform:`translateY(${smooth*Number(p.travelY)}px) rotateX(${p.pitch}deg) rotateY(${p.yaw}deg) rotateZ(${p.roll}deg) scale(${Number(p.scaleStart)+smooth*(Number(p.scaleEnd)-Number(p.scaleStart))})`}}>
    <div style={{position:'absolute',left:Number(p.cropX)-Number(p.centerX),top:Number(p.cropY)-Number(p.centerY),width:Number(p.cropWidth),height:Number(p.cropHeight),overflow:'hidden',borderRadius:amount('rounding'),maskImage:soft?`linear-gradient(to right,transparent,black ${soft}px,black calc(100% - ${soft}px),transparent)`:undefined}}>
+    <AbsoluteFill style={{maskImage:mask}}>
     {p.mediaType==='video'?<OffthreadVideo src={staticFile(String(p.file))} muted trimBefore={Math.round(Number(props.inOffset??0))} playbackRate={Number(props.speed??1)} style={{...mediaStyle,filter:enabled&&Number(p.exposure)!==100?`brightness(${Number(p.exposure)/100})`:undefined}}/>:<Img src={staticFile(String(p.file))} style={{...mediaStyle,filter:enabled&&Number(p.exposure)!==100?`brightness(${Number(p.exposure)/100})`:undefined}}/>}
     {enabled&&focus.blur>0&&<AbsoluteFill style={{backdropFilter:`blur(${focus.blur}px)`,WebkitBackdropFilter:`blur(${focus.blur}px)`,maskImage:focus.mask,pointerEvents:'none'}}/>}
     {amount('shine')>0&&<AbsoluteFill style={{background:`linear-gradient(115deg,transparent 20%,rgba(255,255,255,${amount('shine')*.006}) ${p.lightX}%,transparent 90%)`,pointerEvents:'none'}}/>}
     {amount('grain')>0&&<AbsoluteFill style={{backgroundImage:`url("${texture}")`,opacity:amount('grain')*.007,mixBlendMode:'soft-light',pointerEvents:'none'}}/>}
+    </AbsoluteFill>
    </div>
   </div>
   {amount('fade')>0&&<AbsoluteFill style={{background:`linear-gradient(to bottom,transparent 30%,${p.fadeColor} 100%)`,opacity:amount('fade')/100,pointerEvents:'none'}}/>}
@@ -39,14 +43,12 @@ export const FilmPlane:React.FC<Record<string,unknown>> = props => {
  </AbsoluteFill>;
 };
 export const filmPlaneCard:CardDef={id:'product-film-plane-v1',name:'Plano de producto · Paralelo',category:'Producto',kind:'video',timing:'realtime',durationInFrames:180,durationProp:'duration',width:1600,height:1000,component:FilmPlane,schema:planeSchema,accent:'#7561d6',inspectorGroups:[
- {id:'focus',label:'Enfoque y profundidad de campo',fields:['aperture','focusU','focusV','focusWidth'],open:true},
- {id:'orientation',label:'Inclinación',fields:['pitch','yaw','roll'],open:true},
- {id:'framing',label:'Encuadre y movimiento',fields:['anchorX','anchorY','scaleStart','scaleEnd','travelY'],open:true},
- {id:'content',label:'Contenido',fields:['file','mediaType','sourceWidth']},
- {id:'crop',label:'Recorte y centro',fields:['cropX','cropY','cropWidth','cropHeight','centerX','centerY','edgeSoftness']},
- {id:'appearance',label:'Apariencia',fields:['effectsEnabled','exposure','shadow','shine','grain','rounding'],open:true},
- {id:'background',label:'Fondo',fields:['backgroundColor','light','lightX'],open:true},
- {id:'finish',label:'Fundido y viñeta',fields:['fadeColor','fade','vignette','fadeFrames']},
+ {id:'orientation',label:'Cámara',fields:['pitch','yaw','roll','scaleStart','scaleEnd','anchorX','anchorY','travelY'],open:true},
+ {id:'focus',label:'Enfoque',fields:['aperture','focusU','focusV','focusWidth'],open:true},
+ {id:'background',label:'Fondo y luz',fields:['backgroundColor','light','lightX','grain']},
+ {id:'appearance',label:'Acabado',fields:['effectsEnabled','exposure','rounding','shine','shadow']},
+ {id:'mask',label:'Máscara',fields:['maskMode','fadeColor','fade','vignette','maskSize','maskSoft']},
+ {id:'content',label:'Contenido y recorte',fields:['file','mediaType','sourceWidth','cropX','cropY','cropWidth','cropHeight','centerX','centerY','edgeSoftness','fadeFrames']},
 ]};
 
 export const FilmCaption:React.FC<Record<string,unknown>>=props=>{

@@ -39,3 +39,16 @@ test('old film JSON gets neutral finishes and enabled effects persist without ch
  const restored=snapshotFilm(JSON.parse(JSON.stringify(plain)));assert.deepEqual(restored,plain);for(const k of ['pitch','yaw','roll','anchorX','centerX','cropX','scaleStart'])assert.equal(props[k],before[k]);
  props.effectsEnabled='false';assert.equal(validateFilm(plain).ok,false);
 });
+
+test('mask controls round-trip and bypass without changing existing geometry',async()=>{
+ const {planeMask}=await import('../src/cards/product/film-mask.mjs');
+ assert.equal(planeMask('0',65,35),undefined);
+ assert.equal(planeMask('2',65,35,false),undefined);
+ for(const mode of ['1','2']) {
+  const p=snapshotFilm(fixture());const props=p.tracks[2].clips[0].props;
+  Object.assign(props,{maskMode:mode,maskSize:47,maskSoft:24});
+  assert.deepEqual(snapshotFilm(JSON.parse(JSON.stringify(p))),p);
+  for(const size of [0,100])for(const soft of [0,100])assert.ok(!planeMask(mode,size,soft).includes('NaN'));
+ }
+ const p=fixture();p.tracks[2].clips[0].props.maskMode='3';assert.equal(validateFilm(p).ok,false);
+});

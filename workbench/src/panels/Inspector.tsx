@@ -61,6 +61,8 @@ const PropControl: React.FC<{
             max={field.max}
             step={field.step}
             onPointerDown={onBegin}
+            onKeyDown={onBegin}
+            aria-label={field.label}
             onChange={(e) => onChange(Number(e.target.value))}
           />
           <span className="slider-val">
@@ -158,6 +160,7 @@ export const Inspector: React.FC = () => {
 
   const { track, clip } = hit;
   const card = CARDS[clip.cardId];
+  const productControls = card?.id === "product-film-plane-v1" || card?.id === "product-optical-scene";
   const fps = project.fps;
   // 卡片编排帧率 ≠ 工程帧率（只有逐帧编排的卡需要提示；媒体卡按墙钟走无此问题）
   const srcFps = card ? cardFps(card) : fps;
@@ -187,10 +190,12 @@ export const Inspector: React.FC = () => {
         {card && card.schema.length > 0 && (() => {
           const values = themedProps(MANIFEST, card, project.themeId, clip.props, project.themeColors);
           const renderField = (field: PropField) => (
-            <Row key={field.key} label={tx(field.label)}>
+            <React.Fragment key={field.key}><Row label={tx(field.label)}>
               <PropControl field={field} value={values[field.key] ?? field.default}
                 onChange={(v) => updateClipProps(clip.id, { [field.key]: v })} onBegin={begin} />
             </Row>
+            {productControls && field.key === "fadeColor" && <button className="btn" onClick={() => {commit(); updateClipProps(clip.id, {fadeColor: values.backgroundColor ?? "#ffffff"});}}>Igualar al fondo</button>}
+            </React.Fragment>
           );
           if (!card.inspectorGroups) return (
             <section><div className="sec-title">{t("insp.contentStyle")}</div>
