@@ -12,6 +12,11 @@ export const planeSchema = [
  slider('pitch','Inclinación ↕',12,-85,85,.5),slider('yaw','Giro ↔',-10,-85,85,.5),slider('roll','Rotación ⟳',-7,-180,180,.5),
  slider('scaleStart','Acercamiento inicial',1,.1,6,.005),slider('scaleEnd','Acercamiento final',1.025,.1,6,.005),
  number('travelY','Recorrido vertical',-12),number('edgeSoftness','Suavidad del recorte',5,0,100),
+ {type:'boolean',key:'effectsEnabled',label:'Activar acabados',default:true},
+ slider('aperture','Desenfoque',0,0,32,.5),slider('focusU','Foco horizontal ↔',.5,0,1,.01),slider('focusV','Foco vertical ↕',.5,0,1,.01),slider('focusWidth','Zona nítida',.2,.02,.8,.01),
+ slider('exposure','Exposición',100,50,150,1),slider('light','Luz de fondo',0,0,100,1),slider('lightX','Posición de luz',65,0,100,1),
+ slider('shadow','Sombra',0,0,100,1),slider('shine','Reflejo',0,0,100,1),slider('grain','Grano',0,0,100,1),slider('rounding','Esquinas',0,0,80,1),
+ color('fadeColor','Color del fundido','#ffffff'),slider('fade','Fundido inferior',0,0,100,1),slider('vignette','Viñeta',0,0,100,1),
  number('fadeFrames','Fundido · frames',15,0,300,1),color('backgroundColor','Fondo','#ffffff'),
 ];
 

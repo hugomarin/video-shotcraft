@@ -19,6 +19,7 @@ export function validateFilm(project){
   for(const k of Object.keys(p))if(!schema.some(f=>f.key===k))errors.push(`${c.id}: unsupported property ${k}`);
   for(const f of schema){const v=Object.hasOwn(p,f.key)?p[f.key]:f.default;
    if(['number','slider'].includes(f.type)){if(!Number.isFinite(v)||(f.min!==undefined&&v<f.min)||(f.max!==undefined&&v>f.max))errors.push(`${c.id}: invalid ${f.key}`);}
+   else if(f.type==='boolean'){if(typeof v!=='boolean')errors.push(`${c.id}: invalid ${f.key}`);}
    else if(typeof v!=='string'||(f.type==='select'&&!f.options.some(o=>o.value===v))||(f.type==='color'&&!/^#[0-9a-f]{6}$/i.test(v)))errors.push(`${c.id}: invalid ${f.key}`);
   }
   if(typeof p.file==='string' && p.file && (/^(?:[a-z]+:|\/|\\)/i.test(p.file)||p.file.split(/[\\/]/).includes('..')))errors.push(`${c.id}: asset must be a public-relative path`);
