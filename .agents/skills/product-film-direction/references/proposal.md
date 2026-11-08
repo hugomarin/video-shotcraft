@@ -21,6 +21,9 @@ Muestra apertura, momento protagonista y cierre usando material real del product
 
 No generes todos los frames. Para validar un movimiento conflictivo puede proponerse después un animatic breve, dentro del alcance autorizado.
 
+## Proyecto editable compartido
+Para bocetos renderizados y producción en Shotcraft, indica el JSON nativo, versión del contrato, clips/pistas y medios utilizados. Las imágenes clave deben salir de ese mismo proyecto; no mantengas una segunda composición con sus propios parámetros. Relaciona cada toma del guion con su clip y frame de referencia. Explicita efectos aún no representables sin simular que están integrados. En un encargo solo de historia/guion, registra esta correspondencia como pendiente si todavía no hay proyecto ni medios.
+
 ## Guion por tomas
 | Tiempo tentativo | Propósito y acción | Encuadre y movimiento | Resultado y pausa | Enlace a siguiente toma | Música/sonido | Material necesario |
 | --- | --- | --- | --- | --- | --- | --- |

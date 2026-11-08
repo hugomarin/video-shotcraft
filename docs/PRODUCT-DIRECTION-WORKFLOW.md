@@ -14,15 +14,17 @@ Requiere Python 3.9+ y Git con acceso a GitHub. El origen y commit están fijado
 
 1. **Prompt libre → historia y guion.** Ordenar las ideas, recomendar una historia, asignar tiempos orientativos y justificar omisiones. Separar acciones observadas, supuestos y capacidades que requerirían desarrollo.
 2. **Brief visual → referencias del usuario.** Pedir ejemplos concretos de apertura, movimiento y cierre; indicar qué decisiones resolverán. Música o intención sonora si existe. No convertir falta de audio en bloqueo del guion.
-3. **Referencias → propuesta visual.** Tres imágenes clave basadas en el producto real, encuadres, movimiento y relación musical. Separar bocetos de funciones existentes. No producir todo el video para explicar una dirección.
-4. **Dirección acordada → producción.** Capturar o preparar solo lo necesario, implementar movimiento con tiempo de frame y exportar lo autorizado. Mantener guion/JSON y medios editables.
+3. **Referencias → propuesta visual.** Tres imágenes clave basadas en el producto real, renderizadas desde un proyecto JSON nativo de Shotcraft, con encuadres, movimiento y relación musical. Separar bocetos de funciones existentes. No producir todo el video para explicar una dirección.
+4. **Dirección acordada → producción.** Capturar o preparar solo lo necesario, implementar movimiento con tiempo de frame y exportar lo autorizado. Continuar sobre el mismo JSON y renderer nativo de los bocetos; mantener tomas, textos, degradado y música editables en el timeline. No construir una composición independiente para trasladarla después.
 5. **Resultado → evaluación crítica.** Comparar evidencia con la referencia, revisar transiciones en movimiento y no solo fotogramas. Registrar qué funcionó, diferencias deliberadas, defectos y siguiente corrección concreta.
 
 El usuario puede autorizar varias etapas de una vez; no añadir aprobaciones redundantes. Si ha indicado que primero entregará las referencias, esperar ese material antes de decidir la dirección final o producir.
 
+El contrato técnico compartido está en [PRODUCT-FILM-CONTRACT.md](PRODUCT-FILM-CONTRACT.md). Validar y materializar defaults antes de abrir el proyecto. Si falta una capacidad, identificarla y extender primero el contrato/card nativa solo dentro del alcance autorizado; no sustituirla con código externo al editor. Para entregar producción, verificar edición, undo/redo, persistencia, seek y render, y entregar JSON y medios además del video solicitado.
+
 ## Prueba con worker independiente
 
-Cuando se solicite, iniciar un worker sin historial de conversación. Darle el prompt libre, las skills, el alcance vigente, acceso al producto y una carpeta de salida aislada. No suministrar guiones, renders ni críticas anteriores como si fueran parte del prompt. En una prueba de guion, no pedirle un video como criterio de éxito.
+Cuando se solicite, iniciar un worker sin historial de conversación. Darle el prompt libre, las skills, el contrato JSON nativo, el alcance vigente, acceso al producto y una carpeta de salida aislada. El contrato técnico compartido es parte del encargo; no supone entregarle una solución visual. No suministrar guiones, renders ni críticas anteriores como si fueran parte del prompt. En una prueba de guion, no pedirle un video como criterio de éxito.
 
 El evaluador fija antes de leer la entrega estos criterios:
 
