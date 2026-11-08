@@ -1,6 +1,6 @@
 ---
 name: product-film-direction
-description: Convierte referencias de video, imágenes y recorridos de una aplicación en storytelling, dirección de arte, imágenes clave y guion musical antes de producir un video de producto. Úsala para proponer o revisar la intención visual y el ritmo de una demo o lanzamiento; no para arreglos técnicos aislados del editor.
+description: Convierte referencias de video, imágenes y recorridos de una aplicación en storytelling, dirección de arte, imágenes clave y guion musical, y produce videos editables en Shotcraft desde su JSON nativo. Úsala para dirigir o producir una demo o lanzamiento; no para arreglos técnicos aislados del editor.
 ---
 
 # Storytelling y dirección de arte de producto
@@ -9,7 +9,7 @@ Entrega una propuesta concreta que permita discutir encuadre, movimiento y ritmo
 
 ## Alcance de esta etapa
 
-Si el encargo es una propuesta previa, termina con historia, imágenes clave y guion revisables. No modifiques el producto, instales dependencias, grabes un recorrido completo ni exportes el video final como consecuencia automática de planearlo. Puedes inspeccionar la aplicación y obtener capturas de los estados necesarios dentro de la autorización existente. Un boceto puede hacerse en un archivo aislado, sin cambiar la aplicación. Si el usuario autoriza expresamente continuar a producción, esa instrucción gobierna; no impongas una nueva aprobación redundante.
+Si el encargo es una propuesta previa, termina con historia, imágenes clave y guion revisables. No modifiques el producto, instales dependencias, grabes un recorrido completo ni exportes el video final como consecuencia automática de planearlo. Puedes inspeccionar la aplicación y obtener capturas de los estados necesarios dentro de la autorización existente. Un boceto puede guardarse como un proyecto JSON aislado y renderizar sus imágenes clave con Shotcraft, sin cambiar la aplicación. Si el usuario autoriza expresamente continuar a producción, esa instrucción gobierna; no impongas una nueva aprobación redundante.
 
 ## Interpretar el material
 
@@ -46,13 +46,24 @@ Lee [la plantilla de propuesta](references/proposal.md) al preparar la entrega.
 - Usa frases musicales para estructurar escenas y acentos seleccionados para eventos importantes. Conserva el tiempo de lectura y escritura; no fuerces cada clic a un beat ni aceleres toda la captura para encajar.
 - Distingue música, sonidos de interacción y audio original. Sugiere sonido discreto cuando ayude a entender causa y efecto. Usar una referencia musical para analizar no supone tener permiso para distribuirla; anota si la pista de producción sigue pendiente.
 
+## JSON nativo desde el primer boceto
+
+Para los videos de este flujo, Shotcraft es el entorno de edición y su `ProjectData` JSON es la única fuente de verdad desde el principio. Remotion es el motor de preview/render. No crees una composición TSX/HTML independiente para después trasladarla, ni entregues un MP4 aplanado como sustituto del proyecto editable.
+
+- Antes de construir imágenes clave o un animatic, localiza el repositorio Shotcraft y lee `docs/PRODUCT-FILM-CONTRACT.md`; consulta `node workbench/scripts/product-film.mjs catalog` y `workbench/examples/product-film.json`. Usa el contrato y las cards disponibles, no un esquema inventado. Para el estilo paralelo aprobado, utiliza `productFilm` v1 y sus unidades explícitas; no conviertas sus ángulos/recortes a las unidades de la card óptica.
+- Escribe tomas, tiempos en frames, encuadres, textos, degradado y música en ese JSON. Mantén elementos editables en pistas nativas y archivos relativos a `public/`. Materializa los valores con `snapshot` y valida con `validate` del CLI antes de abrir el proyecto. No reutilices rutas privadas de una prueba anterior como dependencias del formato.
+- Obtén los bocetos y pruebas de movimiento del mismo JSON mediante las cards nativas y `MainComposition`. Una entrada Remotion auxiliar puede limitarse a cargar ese proyecto y renderer compartidos; no debe duplicar geometría, animaciones, textos o tiempos. Las imágenes de referencia externas siguen siendo referencias, no la implementación del montaje.
+- Si falta un efecto, identifica la limitación y su impacto en la propuesta. Si el desarrollo está dentro del alcance autorizado, extiende primero una card/PropField/contrato nativo y después úsalo en el JSON. Si no lo está, entrega la parte representable y deja el efecto pendiente explícitamente. No lo resuelvas por fuera del editor ni afirmes equivalencia aproximada como traslado sin pérdidas.
+- Antes de entregar producción, abre el proyecto en Shotcraft y verifica cambio de inclinación/encuadre, texto, audio, undo/redo y persistencia según los elementos usados. Revisa seek y exporta un clip con música si corresponde al encargo; confirma que preview y render consumen el mismo proyecto. Si existe un original que preservar, compara frames y audio y declara el alcance de la comparación.
+- Entrega el JSON editable, sus medios empaquetados cuando deban trasladarse, y el acceso local al editor; el video es una salida adicional cuando se solicite. No declares terminada la producción únicamente porque existe un MP4. Un encargo de guion sin medios todavía puede terminar en texto: esta regla no autoriza producción, grabaciones o desarrollo adicionales.
+
 ## Herramientas y paso a producción
 
 Las guías de HyperFrames pueden aportar vocabulario y procedimientos de movimiento; consulta sus referencias de motion/review si están disponibles y resultan útiles. Sus preferencias estéticas son ejemplos, no sustituyen la referencia elegida. No cambies de motor por utilizar esas guías.
 
 Para implementar en Remotion, carga `remotion-best-practices` instalada y solo las referencias necesarias. Comprueba compatibilidad con la versión del proyecto antes de emplear APIs de una guía más reciente; no actualices paquetes automáticamente.
 
-En Product Studio sobre Shotcraft, conserva editor, timeline y render Remotion. El frame gobierna cámara, contenido y efectos; GSAP es opcional para autoría, no un segundo reloj. Traduce el guion a las capacidades existentes y separa los faltantes. No implementes una funcionalidad solo porque figura como posibilidad en la propuesta.
+En Product Studio sobre Shotcraft, conserva editor, timeline y render Remotion. El frame gobierna cámara, contenido y efectos; GSAP es opcional para autoría, no un segundo reloj. Expresa el guion directamente en el JSON nativo con las capacidades existentes y separa los faltantes. No implementes una funcionalidad solo porque figura como posibilidad en la propuesta.
 
 ## Revisión y entrega
 
