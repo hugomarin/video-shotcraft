@@ -1,3 +1,4 @@
+import {planeOrientation} from './film-orientation.mjs';
 import {planeMask} from './film-mask.mjs';
 import {planeFocus} from './film-focus.mjs';
 import {planeSchema,captionSchema,fadeSchema} from './film-schema.mjs';
@@ -21,14 +22,14 @@ export const FilmPlane:React.FC<Record<string,unknown>> = props => {
  const opacity=fade>0?Math.min(interpolate(f,[0,fade],[0,1],clamp),interpolate(f,[d-1-fade,d-1],[1,0],clamp)):1;
  const mediaStyle:React.CSSProperties={position:'absolute',width:Number(p.sourceWidth),left:-Number(p.cropX),top:-Number(p.cropY),maxWidth:'none'};
  const enabled=p.effectsEnabled===true;
- const focus=planeFocus(Object.fromEntries(['pitch','yaw','roll','cropWidth','cropHeight','focusU','focusV','focusWidth','aperture'].map(k=>[k,Number(p[k])])) as Parameters<typeof planeFocus>[0]);
+ const focus=planeFocus({cameraModel:String(p.cameraModel),pitch:Number(p.pitch),yaw:Number(p.yaw),roll:Number(p.roll),cropWidth:Number(p.cropWidth),cropHeight:Number(p.cropHeight),focusU:Number(p.focusU),focusV:Number(p.focusV),focusWidth:Number(p.focusWidth),aperture:Number(p.aperture)});
  const amount=(key:string)=>enabled?Number(p[key]):0;
  const texture='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="3" seed="7" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n)" opacity=".5"/></svg>');
  const mask=planeMask(String(p.maskMode),Number(p.maskSize),Number(p.maskSoft),enabled);
  const soft=Math.min(Number(p.edgeSoftness),Number(p.cropWidth)/2);
  return <AbsoluteFill style={{background:String(p.backgroundColor),opacity}}>
   {amount('light')>0&&<AbsoluteFill style={{background:`radial-gradient(ellipse at ${p.lightX}% 10%,rgba(255,255,255,${amount('light')/100}),transparent 75%)`}}/>}
-  <div style={{position:'absolute',left:Number(p.anchorX),top:Number(p.anchorY),filter:amount('shadow')?`drop-shadow(0 18px 24px rgba(0,0,0,${amount('shadow')*.006}))`:undefined,transformOrigin:'0 0',transform:`translateY(${smooth*Number(p.travelY)}px) rotateX(${p.pitch}deg) rotateY(${p.yaw}deg) rotateZ(${p.roll}deg) scale(${Number(p.scaleStart)+smooth*(Number(p.scaleEnd)-Number(p.scaleStart))})`}}>
+  <div style={{position:'absolute',left:Number(p.anchorX),top:Number(p.anchorY),filter:amount('shadow')?`drop-shadow(0 18px 24px rgba(0,0,0,${amount('shadow')*.006}))`:undefined,transformOrigin:'0 0',transform:`translateY(${smooth*Number(p.travelY)}px) ${planeOrientation(String(p.cameraModel),Number(p.pitch),Number(p.yaw),Number(p.roll))} scale(${Number(p.scaleStart)+smooth*(Number(p.scaleEnd)-Number(p.scaleStart))})`}}>
    <div style={{position:'absolute',left:Number(p.cropX)-Number(p.centerX),top:Number(p.cropY)-Number(p.centerY),width:Number(p.cropWidth),height:Number(p.cropHeight),overflow:'hidden',borderRadius:amount('rounding'),maskImage:soft?`linear-gradient(to right,transparent,black ${soft}px,black calc(100% - ${soft}px),transparent)`:undefined}}>
     <AbsoluteFill style={{maskImage:mask}}>
     {p.mediaType==='video'?<OffthreadVideo src={staticFile(String(p.file))} muted trimBefore={Math.round(Number(props.inOffset??0))} playbackRate={Number(props.speed??1)} style={{...mediaStyle,filter:enabled&&Number(p.exposure)!==100?`brightness(${Number(p.exposure)/100})`:undefined}}/>:<Img src={staticFile(String(p.file))} style={{...mediaStyle,filter:enabled&&Number(p.exposure)!==100?`brightness(${Number(p.exposure)/100})`:undefined}}/>}
@@ -43,7 +44,7 @@ export const FilmPlane:React.FC<Record<string,unknown>> = props => {
  </AbsoluteFill>;
 };
 export const filmPlaneCard:CardDef={id:'product-film-plane-v1',name:'Plano de producto · Paralelo',category:'Producto',kind:'video',timing:'realtime',durationInFrames:180,durationProp:'duration',width:1600,height:1000,component:FilmPlane,schema:planeSchema,accent:'#7561d6',inspectorGroups:[
- {id:'orientation',label:'Cámara',fields:['pitch','yaw','roll','scaleStart','scaleEnd','anchorX','anchorY','travelY'],open:true},
+ {id:'orientation',label:'Cámara',fields:['cameraModel','pitch','yaw','roll','scaleStart','scaleEnd','anchorX','anchorY','travelY'],open:true},
  {id:'focus',label:'Enfoque',fields:['aperture','focusU','focusV','focusWidth'],open:true},
  {id:'background',label:'Fondo y luz',fields:['backgroundColor','light','lightX','grain']},
  {id:'appearance',label:'Acabado',fields:['effectsEnabled','exposure','rounding','shine','shadow']},

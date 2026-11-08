@@ -3,6 +3,7 @@ const slider = (key,label,value,min,max,step=.1) => ({type:'slider',key,label,de
 const text = (key,label,value) => ({type:'text',key,label,default:value});
 const color = (key,label,value) => ({type:'color',key,label,default:value});
 export const planeSchema = [
+ {type:'select',key:'cameraModel',label:'Movimiento de cámara',default:'legacy',options:[{value:'legacy',label:'Original · Remotion'},{value:'prototype',label:'Giro · prototipo'}]},
  text('file','Archivo','product-demo/dashboard.svg'),
  {type:'select',key:'mediaType',label:'Contenido',default:'image',options:[{value:'image',label:'Imagen'},{value:'video',label:'Video'}]},
  number('sourceWidth','Ancho original',1600,1),

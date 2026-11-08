@@ -52,3 +52,20 @@ test('mask controls round-trip and bypass without changing existing geometry',as
  }
  const p=fixture();p.tracks[2].clips[0].props.maskMode='3';assert.equal(validateFilm(p).ok,false);
 });
+
+test('prototype orientation matches the Y-up prototype basis after CSS axis conversion',async()=>{
+ const {planeOrientation}=await import('../src/cards/product/film-orientation.mjs');
+ const {Matrix4,Vector3}=await import('three');
+ for(const pitch of [-27,0,27])for(const yaw of [-36,0,36]){
+  const r=Math.PI/180, proto=new Matrix4().makeRotationY(yaw*r).multiply(new Matrix4().makeRotationX(pitch*r));
+  const css=new Matrix4().makeRotationY(yaw*r).multiply(new Matrix4().makeRotationX(-pitch*r));
+  for(const [x,y]of [[1,0],[0,1],[.3,.7]]){
+   const a=new Vector3(x,-y,0).applyMatrix4(proto),b=new Vector3(x,y,0).applyMatrix4(css);
+   assert.ok(Math.abs(a.x-b.x)<1e-10);assert.ok(Math.abs(a.y+b.y)<1e-10);assert.ok(Math.abs(a.z-b.z)<1e-10);
+  }
+  assert.equal(planeOrientation('prototype',pitch,yaw,0),`rotateY(${yaw}deg) rotateX(${-pitch}deg) rotateZ(0deg)`);
+ }
+ assert.equal(planeOrientation('legacy',18,-10,-7),'rotateX(18deg) rotateY(-10deg) rotateZ(-7deg)');
+ const p=snapshotFilm(fixture());assert.equal(p.tracks[2].clips[0].props.cameraModel,'legacy');
+ p.tracks[2].clips[0].props.cameraModel='prototype';assert.deepEqual(snapshotFilm(JSON.parse(JSON.stringify(p))),p);
+});
